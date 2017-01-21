@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-Saket will surely go to Tirumala but by walk.
-=======
 saket
->>>>>>> 34444175d0fc00ddf4c0c57e6fe541cc0ab5381d
 !!!Saket goes to Tirumala!!!
+saket
