@@ -20,6 +20,7 @@ public class settings extends AppCompatActivity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
+        setTitle("SETTINGS");
         //setContentView(R.layout.activity_settings);
     }
     @Override

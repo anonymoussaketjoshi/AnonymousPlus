@@ -372,11 +372,16 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
 
     protected void nextPage(Professor professor){
         SharedPreferences.Editor settings_editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        if(professor == null)                                                                       //ADD CORRECT MEASURES
+            finish();
         settings_editor.putString("PROF_ID",professor.getId());
         settings_editor.putString("PROF_NAME",professor.getName());
         settings_editor.commit();
         Intent nextPage = new Intent(this,action_menu.class);
         startActivity(nextPage);
+        settings_editor.putString("PROF_ID","");
+        settings_editor.putString("PROF_NAME","");
+        finish();
     }
 }
 

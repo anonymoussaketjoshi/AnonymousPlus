@@ -21,47 +21,32 @@ import java.util.List;
 public class select_course extends AppCompatActivity {
     ListView courseList;
     TextView greetPerson;
-    SharedPreferences settings;
-    String username = "";
     customListAdapter myAdapter;
-    String purpose;
+    SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_course);
-        //purpose = getIntent().getExtras().getString("purpose","NONE");
         android.support.v7.app.ActionBar myAction = getSupportActionBar();
         myAction.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#028900")));
+        setTitle("Select Course");
         courseList = (ListView) findViewById(R.id.courseListid);
         greetPerson = (TextView) findViewById(R.id.welcome_user_text);
-
-        setTitle("Select Course");
-        greetPerson.setText("Welcome " + username);
-
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        greetPerson.setText("Welcome " + settings.getString("PROF_NAME",""));
         initiateList(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS));
 
     }
     public void course_click(View view){
         Intent nextPage;
-        nextPage = new Intent(this,attendance_session.class);
-        startActivity(nextPage);
-        /*if(purpose=="PROCESS")
-            nextPage = new Intent(this,processImages.class);
-        else if(purpose=="NONE")
-            finish();
-        String courseName = (String) view.getTag();
-        nextPage.putExtra("course_name",courseName.substring(0,courseName.length()-3));
-        startActivity(nextPage);)*/
+        if(settings.getString("PURPOSE","").equals("START_SESSION")) {
+            nextPage = new Intent(this, attendance_session.class);
+            startActivity(nextPage);
+        }
     }
     private void initiateList(File location){
         File [] myfiles = location.listFiles();
-        /*
-        /*List<String> course_list = new ArrayList();
-        for(int i=0;i<myfiles.length;++i)
-            if(myfiles[i].isDirectory())
-                course_list.add(myfiles[i].getName());*/
-
         int valid_dir = 0;
         for(int i=0;i<myfiles.length;++i)
         if(myfiles[i].isDirectory())

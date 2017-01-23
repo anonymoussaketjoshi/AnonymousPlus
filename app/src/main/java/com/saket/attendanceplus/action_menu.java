@@ -15,6 +15,7 @@ public class action_menu extends AppCompatActivity {
 
     public void click_start_session(View view){
         Intent nextPage = new Intent(this,select_course.class);
+        nextPage.putExtra("PURPOSE","START_SESSION");
         startActivity(nextPage);
         finish();
     }
