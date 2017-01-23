@@ -43,8 +43,10 @@ public class select_course extends AppCompatActivity {
 
     }
     public void course_click(View view){
-        /*Intent nextPage;
-        if(purpose=="PROCESS")
+        Intent nextPage;
+        nextPage = new Intent(this,attendance_session.class);
+        startActivity(nextPage);
+        /*if(purpose=="PROCESS")
             nextPage = new Intent(this,processImages.class);
         else if(purpose=="NONE")
             finish();
