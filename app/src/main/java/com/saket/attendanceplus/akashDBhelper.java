@@ -42,8 +42,8 @@ public class akashDBhelper extends SQLiteOpenHelper {
         professorList = new ArrayList<Professor>();
 
         //addProfessor(new Professor("@","Akash","fgh"));
-        /*addCourse(new Course("LS","http..ls//"));
-        addCourse(new Course("BEE","http..bee//"));*/
+        //addCourse(new Course("LS","http..ls//"));
+        //addCourse(new Course("BEE","http..bee//"));
         /*if(checkTable(TABLE_PROFS))
             Toast.makeText(context,"exists",Toast.LENGTH_LONG).show();
         else

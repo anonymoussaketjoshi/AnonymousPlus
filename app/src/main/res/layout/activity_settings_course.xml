@@ -9,5 +9,44 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.saket.attendanceplus.settings_course">
+    <TextView
+        android:id="@+id/course_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/course_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Course Name"
+        android:maxLines="1"
+        android:layout_below="@+id/course_details"/>
+    <EditText
+        android:id="@+id/course_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Course Link"
+        android:maxLines="1"
+        android:layout_below="@+id/course_name"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add"
+            android:id="@+id/course_add_button"
+            android:onClick="add_course"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:id="@+id/course_delete_button"
+            android:onClick="delete_course"/>
+    </LinearLayout>
 
 </RelativeLayout>

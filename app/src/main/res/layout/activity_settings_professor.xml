@@ -8,6 +8,60 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:gravity="center_horizontal"
+    android:weightSum="1"
     tools:context="com.saket.attendanceplus.settings_professor">
+    <TextView
+        android:layout_weight="0.5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/prof_credentials"/>
+
+    <EditText
+        android:layout_weight="0.1"
+        android:id="@+id/prof_id"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="ID"
+    android:maxLines="1"
+    android:layout_below="@+id/prof_credentials"/>
+    <EditText
+        android:layout_weight="0.1"
+        android:id="@+id/prof_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:maxLines="1"
+        android:layout_below="@+id/prof_id"/>
+    <EditText
+        android:layout_weight="0.1"
+        android:id="@+id/prof_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="Password"
+        android:maxLines="1"
+        android:layout_below="@+id/prof_name" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add"
+            android:id="@+id/prof_add_button"
+            android:onClick="add_professor"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:id="@+id/prof_delete_button"
+            android:onClick="delete_professor"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

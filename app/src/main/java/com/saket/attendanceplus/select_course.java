@@ -4,18 +4,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Environment;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.util.ArrayList;
 import java.util.List;
 
 public class select_course extends AppCompatActivity {
@@ -23,7 +20,8 @@ public class select_course extends AppCompatActivity {
     TextView greetPerson;
     customListAdapter myAdapter;
     SharedPreferences settings;
-
+    akashDBhelper dBhelper;
+    List<Course> courses;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,12 +33,14 @@ public class select_course extends AppCompatActivity {
         greetPerson = (TextView) findViewById(R.id.welcome_user_text);
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         greetPerson.setText("Welcome " + settings.getString("PROF_NAME",""));
-        initiateList(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS));
-
+        dBhelper = ((myCustomApplication)getApplication()).dBhelper;
+        populateList();
+        //initiateList(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS));
     }
     public void course_click(View view){
         Intent nextPage;
-        if(settings.getString("PURPOSE","").equals("START_SESSION")) {
+        Bundle myextras = getIntent().getExtras();
+        if(myextras.containsKey("PURPOSE") && myextras.getString("PURPOSE").equals("START_SESSION")) {
             nextPage = new Intent(this, attendance_session.class);
             startActivity(nextPage);
         }
@@ -60,6 +60,17 @@ public class select_course extends AppCompatActivity {
             if(myfiles[i].isDirectory())
                 files[ptr++] = myfiles[i].getName();
         customListAdapter myAdapter = new customListAdapter(this,R.layout.list_button_view,files);
+        courseList.setAdapter(myAdapter);
+    }
+
+    private void populateList(){
+        courses = dBhelper.getCourses();
+        String [] courses_names = new String[courses.size()];
+        for(int i=0;i<courses.size();++i)   {
+            courses_names[i] = courses.get(i).getCourseName();
+        }
+        Toast.makeText(this, Integer.toString(courses.size()),Toast.LENGTH_LONG).show();
+        customListAdapter myAdapter = new customListAdapter(this,R.layout.list_button_view,courses_names);
         courseList.setAdapter(myAdapter);
     }
 }
