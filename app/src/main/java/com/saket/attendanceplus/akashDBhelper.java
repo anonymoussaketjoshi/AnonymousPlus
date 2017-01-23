@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.ContactsContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,7 @@ import java.util.List;
  */
 
 public class akashDBhelper extends SQLiteOpenHelper {
+    Context context;
     private static final int DATABASE_VERSION = 1;
 
     //Database Name
@@ -35,17 +36,28 @@ public class akashDBhelper extends SQLiteOpenHelper {
 
     public akashDBhelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_PROFS_TABLE = "CREATE TABLE " + TABLE_PROFS + "(" +
-                KEY_NAME + " TEXT," + KEY_ID + " TEXT," + KEY_PASSWORD +
-                " TEXT)";
-        String CREATE_COURSES_TABLE = "CREATE TABLE " + TABLE_COURSES + "(" +
-                KEY_COURSENAME + " TEXT," + KEY_COURSELINK + " TEXT)";
-        db.execSQL(CREATE_PROFS_TABLE);
-        db.execSQL(CREATE_COURSES_TABLE);
+        SQLiteDatabase checkDB = null;
+        try {
+            checkDB = SQLiteDatabase.openDatabase(String.valueOf(context.getDatabasePath(this.DATABASE_NAME)), null,
+                    SQLiteDatabase.OPEN_READONLY);
+            checkDB.close();
+        } catch (SQLiteException e) {
+            // database doesn't exist yet.
+        }
+        if(checkDB == null) {
+            String CREATE_PROFS_TABLE = "CREATE TABLE " + TABLE_PROFS + "(" +
+                    KEY_NAME + " TEXT," + KEY_ID + " TEXT," + KEY_PASSWORD +
+                    " TEXT)";
+            String CREATE_COURSES_TABLE = "CREATE TABLE " + TABLE_COURSES + "(" +
+                    KEY_COURSENAME + " TEXT," + KEY_COURSELINK + " TEXT)";
+            db.execSQL(CREATE_PROFS_TABLE);
+            db.execSQL(CREATE_COURSES_TABLE);
+        }
     }
 
     @Override
@@ -122,7 +134,7 @@ public class akashDBhelper extends SQLiteOpenHelper {
                     professor.setPassword(cursor.getString(2));
 
                     professorList.add(professor);
-            
+
             }while (cursor.moveToNext()) ;
         }
         return professorList;
