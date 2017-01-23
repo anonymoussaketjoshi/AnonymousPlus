@@ -36,7 +36,6 @@ public class select_course extends AppCompatActivity {
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         greetPerson.setText("Welcome " + settings.getString("PROF_NAME",""));
         initiateList(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS));
-
     }
     public void course_click(View view){
         Intent nextPage;
