@@ -35,7 +35,6 @@ public class select_course extends AppCompatActivity {
         greetPerson.setText("Welcome " + settings.getString("PROF_NAME",""));
         dBhelper = ((myCustomApplication)getApplication()).dBhelper;
         populateList();
-        //initiateList(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS));
     }
     public void course_click(View view){
         Intent nextPage;
@@ -44,23 +43,6 @@ public class select_course extends AppCompatActivity {
             nextPage = new Intent(this, attendance_session.class);
             startActivity(nextPage);
         }
-    }
-    private void initiateList(File location){
-        File [] myfiles = location.listFiles();
-        int valid_dir = 0;
-        for(int i=0;i<myfiles.length;++i)
-        if(myfiles[i].isDirectory())
-            valid_dir++;
-        if(valid_dir==0){
-            Toast.makeText(this,"NO COURSES FOUND IN DIRECTORIES"+ Integer.toString(valid_dir),Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String [] files = new String[valid_dir];
-        for(int i=0,ptr=0;i<myfiles.length;++i)
-            if(myfiles[i].isDirectory())
-                files[ptr++] = myfiles[i].getName();
-        customListAdapter myAdapter = new customListAdapter(this,R.layout.list_button_view,files);
-        courseList.setAdapter(myAdapter);
     }
 
     private void populateList(){
