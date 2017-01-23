@@ -26,7 +26,10 @@
             android:name=".main_login"
             android:label="@string/title_activity_main_login" />
         <activity android:name=".select_course" />
-        <activity android:name=".action_menu"></activity>
+        <activity android:name=".action_menu" />
+        <activity
+            android:name=".attendance_session"
+            android:label="@string/title_activity_attendance_session"></activity>
     </application>
 
 </manifest>
