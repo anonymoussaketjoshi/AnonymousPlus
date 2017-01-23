@@ -186,8 +186,7 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
-            Intent course_page = new Intent(this,select_course.class);
-            startActivity(course_page);
+
         }
     }
 
@@ -337,8 +336,8 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
             showProgress(false);
 
             if (success) {
-
-                //finish();
+                nextPage();
+                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -350,6 +349,11 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    protected void nextPage(){
+        Intent nextPage = new Intent(this,action_menu.class);
+        startActivity(nextPage);
     }
 }
 

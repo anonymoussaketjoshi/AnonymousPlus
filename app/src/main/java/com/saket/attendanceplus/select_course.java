@@ -30,7 +30,7 @@ public class select_course extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_course);
-        purpose = getIntent().getExtras().getString("purpose","NONE");
+        //purpose = getIntent().getExtras().getString("purpose","NONE");
         android.support.v7.app.ActionBar myAction = getSupportActionBar();
         myAction.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#028900")));
         courseList = (ListView) findViewById(R.id.courseListid);
@@ -54,7 +54,7 @@ public class select_course extends AppCompatActivity {
     }
     private void initiateList(File location){
         File [] myfiles = location.listFiles();
-
+        /*
         /*List<String> course_list = new ArrayList();
         for(int i=0;i<myfiles.length;++i)
             if(myfiles[i].isDirectory())
@@ -62,8 +62,12 @@ public class select_course extends AppCompatActivity {
 
         int valid_dir = 0;
         for(int i=0;i<myfiles.length;++i)
-            if(myfiles[i].isDirectory())
-                valid_dir++;
+        if(myfiles[i].isDirectory())
+            valid_dir++;
+        if(valid_dir==0){
+            Toast.makeText(this,"NO COURSES FOUND IN DIRECTORIES"+ Integer.toString(valid_dir),Toast.LENGTH_SHORT).show();
+            return;
+        }
         String [] files = new String[valid_dir];
         for(int i=0,ptr=0;i<myfiles.length;++i)
             if(myfiles[i].isDirectory())
