@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -27,6 +28,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +63,12 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
     private View mProgressView;
     private View mLoginFormView;
 
+    //Sqlite database for this activity via application class
+    //final myCustomApplication var = (myCustomApplication) getApplicationContext();
+    akashDBhelper dBhelper;
+    List<Professor> professorList = new ArrayList<Professor>();
+    List<Course> courseList = new ArrayList<Course>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +99,23 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        //Calling application object
+        dBhelper = ((myCustomApplication)getApplication()).dBhelper;
+        dBhelper.addProfessor(new Professor("Akash","@akash","@k@sh"));
+        dBhelper.addCourse(new Course("LS","http..ls//"));
+        dBhelper.addCourse(new Course("BEE","http..bee//"));
+        professorList = dBhelper.getProfessors();
+        courseList = dBhelper.getCourses();
+        if(courseList.size() == 0)
+            Toast.makeText(this,"Did not get any list",Toast.LENGTH_LONG).show();
+        else {
+            int size = courseList.size();
+            Toast.makeText(this, courseList.get(0).getCourseName() + " " + courseList.get(0).getCourseLink() + "\n" +
+                    size + "\n" +
+                    courseList.get(size-1).getCourseName() + " " + courseList.get(size-1).getCourseLink() + "\n", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private void populateAutoComplete() {

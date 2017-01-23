@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,32 +33,31 @@ public class akashDBhelper extends SQLiteOpenHelper {
     //Table column names for TABLE_COURSES
     private static final String KEY_COURSENAME = "courseName";
     private static final String KEY_COURSELINK = "courseLink";
+    SQLiteDatabase db;
 
     public akashDBhelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
+        db = getWritableDatabase();
+        /*if(checkTable(TABLE_PROFS))
+            Toast.makeText(context,"exists",Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(context,"not exists",Toast.LENGTH_LONG).show();
+        */
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
-        SQLiteDatabase checkDB = null;
-        try {
-            checkDB = SQLiteDatabase.openDatabase(String.valueOf(context.getDatabasePath(this.DATABASE_NAME)), null,
-                    SQLiteDatabase.OPEN_READONLY);
-            checkDB.close();
-        } catch (SQLiteException e) {
-            // database doesn't exist yet.
-        }
-        if(checkDB == null) {
-            String CREATE_PROFS_TABLE = "CREATE TABLE " + TABLE_PROFS + "(" +
+    public void onCreate(SQLiteDatabase dbo) {
+            String CREATE_PROFS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_PROFS + " (" +
                     KEY_NAME + " TEXT," + KEY_ID + " TEXT," + KEY_PASSWORD +
                     " TEXT)";
-            String CREATE_COURSES_TABLE = "CREATE TABLE " + TABLE_COURSES + "(" +
-                    KEY_COURSENAME + " TEXT," + KEY_COURSELINK + " TEXT)";
-            db.execSQL(CREATE_PROFS_TABLE);
-            db.execSQL(CREATE_COURSES_TABLE);
-        }
+            String CREATE_COURSES_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_COURSES + " ( " +
+                    KEY_COURSENAME + " TEXT, " + KEY_COURSELINK + " TEXT)";
+            dbo.execSQL(CREATE_PROFS_TABLE);
+            dbo.execSQL(CREATE_COURSES_TABLE);
+
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -74,11 +73,11 @@ public class akashDBhelper extends SQLiteOpenHelper {
    * 4) add course
    * 5) del course
    * 6) get course list
-   * 7) get prof list */
+   * 7) get prof list
+   * 8) check table*/
 
     //adding a new professor
     public void addProfessor(Professor p) {
-        SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_ID, p.getId());
@@ -86,14 +85,11 @@ public class akashDBhelper extends SQLiteOpenHelper {
         values.put(KEY_PASSWORD, p.getPassword());
 
         db.insert(TABLE_PROFS, null, values);
-        db.close();
     }
 
     //add checks to see whether given prof existed or not
     public void deleteProfessor(Professor p) {
-        SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_PROFS, KEY_ID + " = ?", new String[]{String.valueOf(p.getId())});
-        db.close();
     }
 
     //password change done via delete prof->add again as new prof
@@ -103,27 +99,43 @@ public class akashDBhelper extends SQLiteOpenHelper {
         addProfessor(p);
     }
 
+    public Boolean checkTable(String table_name){
+        Cursor cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master", null);
+
+        if(cursor!=null) {
+            Toast.makeText(context,Integer.toString(cursor.getCount()),Toast.LENGTH_SHORT).show();
+            if (cursor.getCount() > 0) {
+
+                cursor.moveToFirst();
+                String var = cursor.getString(0);
+                cursor.moveToNext();
+                var += cursor.getString(0);
+                Toast.makeText(context,var,Toast.LENGTH_SHORT).show();
+                cursor.close();
+                return true;
+            }
+            cursor.close();
+        }
+        return false;
+    }
+
+
     public void addCourse(Course c) {
-        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_COURSENAME, c.getCourseName());
         values.put(KEY_COURSELINK, c.getCourseLink());
 
         db.insert(TABLE_COURSES, null, values);
-        db.close();
     }
 
     public void deleteCourse(Course c) {
-        SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_COURSES, KEY_COURSENAME + " = ?", new String[]{String.valueOf(c.getCourseName())});
-        db.close();
     }
 
     public List<Professor> getProfessors() {
         List<Professor> professorList = new ArrayList<Professor>();
 
         String selectQuery = "SELECT * FROM " + TABLE_PROFS;
-        SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
@@ -144,7 +156,6 @@ public class akashDBhelper extends SQLiteOpenHelper {
         List<Course> courseList = new ArrayList<Course>();
 
         String selectQuery = "SELECT * FROM " + TABLE_COURSES;
-        SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
