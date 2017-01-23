@@ -7,6 +7,7 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,6 +15,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -55,7 +57,7 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    //private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -66,8 +68,6 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
     //Sqlite database for this activity via application class
     //final myCustomApplication var = (myCustomApplication) getApplicationContext();
     akashDBhelper dBhelper;
-    List<Professor> professorList = new ArrayList<Professor>();
-    List<Course> courseList = new ArrayList<Course>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +75,13 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
         setContentView(R.layout.activity_main_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
+        mPasswordView = (EditText) findViewById(R.id.password);
+        dBhelper = ((myCustomApplication)getApplication()).dBhelper;
+
         populateAutoComplete();
 
-        mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -96,26 +100,8 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
                 attemptLogin();
             }
         });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-
-        //Calling application object
-        dBhelper = ((myCustomApplication)getApplication()).dBhelper;
-        dBhelper.addProfessor(new Professor("Akash","@akash","@k@sh"));
-        dBhelper.addCourse(new Course("LS","http..ls//"));
-        dBhelper.addCourse(new Course("BEE","http..bee//"));
-        professorList = dBhelper.getProfessors();
-        courseList = dBhelper.getCourses();
-        if(courseList.size() == 0)
-            Toast.makeText(this,"Did not get any list",Toast.LENGTH_LONG).show();
-        else {
-            int size = courseList.size();
-            Toast.makeText(this, courseList.get(0).getCourseName() + " " + courseList.get(0).getCourseLink() + "\n" +
-                    size + "\n" +
-                    courseList.get(size-1).getCourseName() + " " + courseList.get(size-1).getCourseLink() + "\n", Toast.LENGTH_LONG).show();
-        }
-
+        List<Professor> professorList = dBhelper.getProfessors();
+        Toast.makeText(this,Integer.toString(professorList.size()),Toast.LENGTH_SHORT).show();
     }
 
     private void populateAutoComplete() {
@@ -168,9 +154,9 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
+        /*if (mAuthTask != null) {
             return;
-        }
+        }*/
 
         // Reset errors.
         mEmailView.setError(null);
@@ -208,9 +194,16 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            //Toast.makeText(this,email+password,Toast.LENGTH_SHORT).show();
+            Professor match = dBhelper.verifyProfessor(email,password);
+            if(match != null)
+                nextPage(match);
+            else
+                Toast.makeText(this,"INCORRECT CREDENTIALS",Toast.LENGTH_SHORT).show();
+
+            //showProgress(true);
+            //mAuthTask = new UserLoginTask(email, password);
+            //mAuthTask.execute((Void) null);
 
         }
     }
@@ -319,6 +312,7 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
+    /*
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
@@ -374,9 +368,13 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
             mAuthTask = null;
             showProgress(false);
         }
-    }
+    }*/
 
-    protected void nextPage(){
+    protected void nextPage(Professor professor){
+        SharedPreferences.Editor settings_editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        settings_editor.putString("PROF_ID",professor.getId());
+        settings_editor.putString("PROF_NAME",professor.getName());
+        settings_editor.commit();
         Intent nextPage = new Intent(this,action_menu.class);
         startActivity(nextPage);
     }

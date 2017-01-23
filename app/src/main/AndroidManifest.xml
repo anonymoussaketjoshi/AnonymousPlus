@@ -9,11 +9,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".myCustomApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name="com.saket.attendanceplus.myCustomApplication"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -29,7 +29,10 @@
         <activity android:name=".action_menu" />
         <activity
             android:name=".attendance_session"
-            android:label="@string/title_activity_attendance_session"></activity>
+            android:label="@string/title_activity_attendance_session" />
+        <activity android:name=".settings" />
+        <activity android:name=".settings_professor" />
+        <activity android:name=".settings_course"></activity>
     </application>
 
 </manifest>

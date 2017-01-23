@@ -17,7 +17,7 @@ import java.util.List;
 public class akashDBhelper extends SQLiteOpenHelper {
     Context context;
     private static final int DATABASE_VERSION = 1;
-
+    List<Professor> professorList;
     //Database Name
     private static final String DATABASE_NAME = "credentials";
 
@@ -39,6 +39,11 @@ public class akashDBhelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
         db = getWritableDatabase();
+        professorList = new ArrayList<Professor>();
+
+        //addProfessor(new Professor("@","Akash","fgh"));
+        /*addCourse(new Course("LS","http..ls//"));
+        addCourse(new Course("BEE","http..bee//"));*/
         /*if(checkTable(TABLE_PROFS))
             Toast.makeText(context,"exists",Toast.LENGTH_LONG).show();
         else
@@ -57,7 +62,6 @@ public class akashDBhelper extends SQLiteOpenHelper {
             dbo.execSQL(CREATE_COURSES_TABLE);
 
     }
-
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -170,6 +174,17 @@ public class akashDBhelper extends SQLiteOpenHelper {
         }
         return courseList;
 
+    }
+
+    public Professor verifyProfessor(String id, String password){
+        professorList = this.getProfessors();
+        Professor prof;
+        for(int i=0;i<professorList.size();++i){
+            prof = professorList.get(i);
+            if(prof.getId().equals(id) && prof.getPassword().equals(password))
+                return prof;
+        }
+        return null;
     }
 
 

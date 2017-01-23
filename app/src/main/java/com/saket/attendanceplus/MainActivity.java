@@ -13,8 +13,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
     }
-    void nextPage(View view){
+    void click_start(View view){
         Intent loginpage = new Intent(this,main_login.class);
         startActivity(loginpage);
+    }
+    void click_settings(View view){
+        startActivity(new Intent(this,settings.class));
     }
 }
