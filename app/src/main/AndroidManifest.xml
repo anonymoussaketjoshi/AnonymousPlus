@@ -37,6 +37,7 @@
         <activity android:name=".settings_professor" />
         <activity android:name=".settings_course" />
         <activity android:name=".googleapipage"></activity>
+
     </application>
 
 </manifest>
