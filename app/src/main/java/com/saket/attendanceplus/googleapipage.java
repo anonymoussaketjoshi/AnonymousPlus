@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -53,6 +54,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     private TextView mOutputText;
     private Button mCallApiButton;
     ProgressDialog mProgress;
+    SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,10 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
         setContentView(R.layout.activity_googleapipage);
         mOutputText = (TextView) findViewById(R.id.mOutputText);
         mCallApiButton = (Button) findViewById(R.id.mCallApiButton) ;
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        ////////
+        Toast.makeText(this,settings.getString("SESSION_ID",""),Toast.LENGTH_SHORT).show();
+        ////////
         mCallApiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

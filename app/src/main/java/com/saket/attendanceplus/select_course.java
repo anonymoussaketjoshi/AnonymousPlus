@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -22,6 +23,7 @@ public class select_course extends AppCompatActivity {
     SharedPreferences settings;
     akashDBhelper dBhelper;
     List<Course> courses;
+    Bundle myextras;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +35,11 @@ public class select_course extends AppCompatActivity {
         greetPerson = (TextView) findViewById(R.id.welcome_user_text);
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         greetPerson.setText("Welcome " + settings.getString("PROF_NAME",""));
+        myextras = getIntent().getExtras();
         dBhelper = ((myCustomApplication)getApplication()).dBhelper;
         populateList();
     }
     public void course_click(View view){
-        Bundle myextras = getIntent().getExtras();
         if(myextras.containsKey("PURPOSE") && myextras.getString("PURPOSE").equals("START_SESSION")) {
             SharedPreferences.Editor myEditor = settings.edit();
             myEditor.putString("COURSE_NAME",(String) view.getTag());
@@ -48,16 +50,42 @@ public class select_course extends AppCompatActivity {
             myEditor.commit();
             startActivity(new Intent(this, attendance_session.class));
         }
+        else if(myextras.containsKey("PURPOSE") && myextras.getString("PURPOSE").equals("PROCESS")) {
+            SharedPreferences.Editor myEditor = settings.edit();
+            myEditor.putString("COURSE_NAME",(String) view.getTag());
+            myEditor.commit();
+            Intent nextPage = new Intent(this, select_course.class);
+            nextPage.putExtra("PURPOSE","PROCESS2");
+            startActivity(nextPage);
+        }
+        if(myextras.containsKey("PURPOSE") && myextras.getString("PURPOSE").equals("PROCESS2")) {
+            SharedPreferences.Editor myEditor = settings.edit();
+            myEditor.putString("SESSION_ID",(String) view.getTag());
+            myEditor.commit();
+            Intent nextPage = new Intent(this, googleapipage.class);
+            startActivity(nextPage);
+            myEditor.putString("SESSION_ID","");
+            finish();
+        }
     }
 
     private void populateList(){
-        courses = dBhelper.getCourses();
-        String [] courses_names = new String[courses.size()];
-        for(int i=0;i<courses.size();++i)   {
-            courses_names[i] = courses.get(i).getCourseName();
+        if(myextras.containsKey("PURPOSE") &&
+                (myextras.getString("PURPOSE").equals("PROCESS") || myextras.getString("PURPOSE").equals("START_SESSION"))) {
+            courses = dBhelper.getCourses();
+            String[] courses_names = new String[courses.size()];
+            for (int i = 0; i < courses.size(); ++i) {
+                courses_names[i] = courses.get(i).getCourseName();
+            }
+            Toast.makeText(this, Integer.toString(courses.size()), Toast.LENGTH_LONG).show();
+            customListAdapter myAdapter = new customListAdapter(this, R.layout.list_button_view, courses_names);
+            courseList.setAdapter(myAdapter);
         }
-        Toast.makeText(this, Integer.toString(courses.size()),Toast.LENGTH_LONG).show();
-        customListAdapter myAdapter = new customListAdapter(this,R.layout.list_button_view,courses_names);
-        courseList.setAdapter(myAdapter);
+        else if(myextras.containsKey("PURPOSE") && myextras.getString("PURPOSE").equals("PROCESS2")){
+            File sessionfiles = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+
+                    settings.getString("COURSE_NAME",""));
+            customListAdapter myAdapter = new customListAdapter(this, R.layout.list_button_view, sessionfiles.list());
+            courseList.setAdapter(myAdapter);
+        }
     }
 }

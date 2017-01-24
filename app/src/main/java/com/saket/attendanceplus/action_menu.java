@@ -20,4 +20,11 @@ public class action_menu extends AppCompatActivity {
         finish();
     }
 
+    public void click_process(View view){
+        Intent nextPage = new Intent(this,select_course.class);
+        nextPage.putExtra("PURPOSE","PROCESS");
+        startActivity(nextPage);
+        finish();
+    }
+
 }

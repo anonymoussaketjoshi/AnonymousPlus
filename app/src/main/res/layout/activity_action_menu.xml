@@ -32,7 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:id="@+id/button_process" />
+            android:id="@+id/button_process"
+            android:onClick="click_process"/>
 
     </LinearLayout>
 </RelativeLayout>
