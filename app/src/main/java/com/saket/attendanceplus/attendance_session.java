@@ -39,6 +39,7 @@ public class attendance_session extends AppCompatActivity {
     Bitmap tempImage = null;
     View focusView = null;
     Bitmap curImage = null;
+    SharedPreferences settings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,9 +54,12 @@ public class attendance_session extends AppCompatActivity {
         mImageView = (ImageView) findViewById(R.id.imageViewid);
         mPasswordView = (EditText) findViewById(R.id.password);
         mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        Toast.makeText(this,settings.getString("SESSION_ID","--"),Toast.LENGTH_SHORT).show();
         focusView = mEmailView;
         focusView.requestFocus();
-
+        if(!createFolder())
+            Toast.makeText(this,"UNABLE TO INITIALIZE SESSION DIRECTORY",Toast.LENGTH_SHORT).show();
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -73,6 +77,8 @@ public class attendance_session extends AppCompatActivity {
             }
         });
 
+
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){                                                  //CORRECT
@@ -88,7 +94,8 @@ public class attendance_session extends AppCompatActivity {
     }
     @Override
     public void onBackPressed(){
-        Toast.makeText(this,"Back? I don't think so",Toast.LENGTH_LONG).show();
+        finish();
+        //Toast.makeText(this,"Back? I don't think so",Toast.LENGTH_LONG).show();
     }
 
     public void takePhoto(View view) throws IOException {
@@ -113,6 +120,17 @@ public class attendance_session extends AppCompatActivity {
                 return;
             }*/
         }
+    }
+
+    public Boolean createFolder()   {
+        String course_name = settings.getString("COURSE_NAME","--").replaceAll(" ","_");
+        String session_id = settings.getString("SESSION_ID","--");
+        File coursef = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+course_name);
+        if(coursef.exists())
+            new File(coursef.getAbsolutePath() + "/" + session_id).mkdir();
+        else
+            return false;
+        return true;
     }
     private void attemptLogin() {
 

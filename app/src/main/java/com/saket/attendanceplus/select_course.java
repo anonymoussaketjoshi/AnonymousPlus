@@ -37,11 +37,16 @@ public class select_course extends AppCompatActivity {
         populateList();
     }
     public void course_click(View view){
-        Intent nextPage;
         Bundle myextras = getIntent().getExtras();
         if(myextras.containsKey("PURPOSE") && myextras.getString("PURPOSE").equals("START_SESSION")) {
-            nextPage = new Intent(this, attendance_session.class);
-            startActivity(nextPage);
+            SharedPreferences.Editor myEditor = settings.edit();
+            myEditor.putString("COURSE_NAME",(String) view.getTag());
+            myEditor.putString("SESSION_ID",new saketTime()
+                                                .getSessionId(
+                                                        settings.getString("PROF_NAME",""),
+                                                        (String) view.getTag()));
+            myEditor.commit();
+            startActivity(new Intent(this, attendance_session.class));
         }
     }
 
