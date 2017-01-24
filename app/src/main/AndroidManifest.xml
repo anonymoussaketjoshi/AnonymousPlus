@@ -32,7 +32,7 @@
             android:label="@string/title_activity_attendance_session" />
         <activity android:name=".settings" />
         <activity android:name=".settings_professor" />
-        <activity android:name=".settings_course"></activity>
+        <activity android:name=".settings_course" />
     </application>
 
 </manifest>

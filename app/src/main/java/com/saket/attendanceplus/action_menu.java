@@ -19,4 +19,5 @@ public class action_menu extends AppCompatActivity {
         startActivity(nextPage);
         finish();
     }
+
 }
