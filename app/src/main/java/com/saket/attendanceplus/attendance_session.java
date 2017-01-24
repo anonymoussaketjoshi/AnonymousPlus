@@ -40,6 +40,7 @@ public class attendance_session extends AppCompatActivity {
     View focusView = null;
     Bitmap curImage = null;
     SharedPreferences settings;
+    File session_folder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,8 +127,10 @@ public class attendance_session extends AppCompatActivity {
         String course_name = settings.getString("COURSE_NAME","--").replaceAll(" ","_");
         String session_id = settings.getString("SESSION_ID","--");
         File coursef = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+course_name);
-        if(coursef.exists())
-            new File(coursef.getAbsolutePath() + "/" + session_id).mkdir();
+        if(coursef.exists()) {
+            session_folder = new File(coursef.getAbsolutePath() + "/" + session_id);
+            session_folder.mkdir();
+        }
         else
             return false;
         return true;
@@ -163,15 +166,17 @@ public class attendance_session extends AppCompatActivity {
             mEmailView.setText("");
             mPasswordView.setText("");
             focusView = mEmailView;
-            submit(email);
+            if(submit(email))
+                Toast.makeText(this,"Saved Sucessfully ID: "+email,Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(this,"SAVING FAILED. Contact Admin",Toast.LENGTH_SHORT).show();
         }
         focusView.requestFocus();
     }
     private boolean submit(String id){
-        /*if(imageSet==false) return false;                                                         //SUBMIT ATTENDANCE
+        if(imageSet==false) return false;                                                         //SUBMIT ATTENDANCE
         try{
-            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            File imageFile = new File(storageDir,session+id+".png");
+            File imageFile = new File(session_folder,id+".png");
             FileOutputStream fileStream = new FileOutputStream(imageFile);
             curImage.compress(Bitmap.CompressFormat.PNG,100,fileStream);
             fileStream.close();
@@ -181,7 +186,7 @@ public class attendance_session extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
-        }*/
+        }
         return true;
     }
     private boolean isEmailValid(String email) {
