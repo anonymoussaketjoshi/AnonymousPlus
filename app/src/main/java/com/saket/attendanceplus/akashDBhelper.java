@@ -196,7 +196,7 @@ public class akashDBhelper extends SQLiteOpenHelper {
         Professor prof;
         for(int i=0;i<professorList.size();++i){
             prof = professorList.get(i);
-            if(prof.getId().equals(id) && prof.getPassword().equals(password))
+            if(prof.getId().toLowerCase().equals(id.toLowerCase()) && prof.getPassword().equals(password))
                 return prof;
         }
         return null;

@@ -29,6 +29,13 @@ TO DO
 STRING TO number	CHECK BOTTOM FOR FUNCTION	***akash
 kairos authenticate check				***akash
 Action menu beautify					***akash
+
+To lower when matching					***akash  ------------------------------------------------------------------------
+THEME BLUE						***saket
+delete folder on delete course				***akash ----------------------------------------------------------------------
+session select - decrypt to prof and time		***akash ------------------------------------------------------------------
+Reverse session id min,hour				***saket
+Call sheets api correctly				***now
 To lower when matching					***akash
 THEME BLUE						***saket			-----------------
 To lower when matching					***akash                                                    $$Done
@@ -47,8 +54,10 @@ Appstart checks:
 	check folders					***akash 
 	set default preferences				***saket			----------------
 Remove password from attendance activity
-On add or delete refresh text box			***akash                                                $$Done
+On add or delete refresh text box			***akash ---------------------------------------------------------------------
 Show Courses and link					***akash
+Beautify course and professor add settings		***akash    --------------------------------------------------------------
+
 Beautify course and professor add settings		***akash
 Sign out functionality, override back button on session	***saket			------------------------
 Beautify course and professor add settings		***akash                                            $$Done
@@ -74,3 +83,9 @@ Case check on
 //REMOVE 
 //ADD ID CHECKING
 //ADD SHOW PASSWORD button
+
+
+single line false ------------------------------------------------------------------------------------------------------------
+when checking to  lower
+folder delete ----------------------------------------------------------------------------------------------------------------
+remove link when deleting ----------------------------------------------------------------------------------------------------
