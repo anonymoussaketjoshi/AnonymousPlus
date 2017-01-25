@@ -29,6 +29,13 @@ public class settings_course extends AppCompatActivity {
         textView.setText(textViewText);
     }
 
+    void deleteRecursive(File file) {
+        if(file.isDirectory())
+            for(File child : file.listFiles())
+                deleteRecursive(child);
+        file.delete();
+    }
+
     //Creates a folder when clicked on add with given name
     public void add_course(View view)  {
         EditText editText1 = (EditText) findViewById(R.id.course_name);
@@ -65,19 +72,19 @@ public class settings_course extends AppCompatActivity {
         EditText editText2 = (EditText) findViewById(R.id.course_link);
         String courseLink = editText2.getText().toString();
         Boolean courseExists = false;
-        if(!courseName.equals("") && !courseLink.equals("")) {
+        if(!courseName.equals("")) {
             for(int i = 0;i<courseList.size();++i)  {
                 Course course = courseList.get(i);
-                if(course.getCourseName().equals(courseName))
+                if(course.getCourseName().toLowerCase().equals(courseName.toLowerCase()))
                     courseExists = true;
             }
             if(courseExists) {
                 dBhelper.deleteCourse(new Course(courseName, courseLink));
                 editText1.setText("");
                 editText2.setText("");
-                File dir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+courseName);
-                if(dir.isDirectory())
-                    dir.delete();
+                File courseFolder = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+courseName);
+                deleteRecursive(courseFolder);
+
             }
             else
                 Toast.makeText(this,"Course details invalid, Course doesn't exist!",Toast.LENGTH_LONG).show();

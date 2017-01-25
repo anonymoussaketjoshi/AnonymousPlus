@@ -23,10 +23,10 @@ TO DO
 STRING TO number	CHECK BOTTOM FOR FUNCTION	***akash
 kairos authenticate check				***akash
 Action menu beautify					***akash
-To lower when matching					***akash                                                    $$Done
+To lower when matching					***akash  ------------------------------------------------------------------------
 THEME BLUE						***saket
-delete folder on delete course				***akash
-session select - decrypt to prof and time		***akash
+delete folder on delete course				***akash ----------------------------------------------------------------------
+session select - decrypt to prof and time		***akash ------------------------------------------------------------------
 Reverse session id min,hour				***saket
 Call sheets api correctly				***now
 Internet connectivity					***kairos saket
@@ -39,9 +39,9 @@ Appstart checks:
 	check folders					***akash 
 	
 Remove password from attendance activity
-On add or delete refresh text box			***akash                                                $$Done
+On add or delete refresh text box			***akash ---------------------------------------------------------------------
 Show Courses and link					***akash
-Beautify course and professor add settings		***akash                                            $$Done
+Beautify course and professor add settings		***akash    --------------------------------------------------------------
 Sign out functionality, override back button on session	***saket
 delete images matched correctly				***saket
 REMOVE ID CHECK						*@*saket
@@ -59,3 +59,9 @@ Add root account					***saket
 //REMOVE 
 //ADD ID CHECKING
 //ADD SHOW PASSWORD button
+
+
+single line false ------------------------------------------------------------------------------------------------------------
+when checking to  lower
+folder delete ----------------------------------------------------------------------------------------------------------------
+remove link when deleting ----------------------------------------------------------------------------------------------------
