@@ -35,6 +35,12 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
+import com.google.api.services.sheets.v4.model.BatchUpdateValuesRequest;
+import com.google.api.services.sheets.v4.model.BatchUpdateValuesResponse;
+import com.google.api.services.sheets.v4.model.DimensionRange;
+import com.google.api.services.sheets.v4.model.InsertDimensionRequest;
+import com.google.api.services.sheets.v4.model.Request;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import com.kairos.Kairos;
 import com.kairos.KairosListener;
@@ -59,6 +65,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
+    String spreadsheetId = "1u6f5CySr98DB7mdIGDopmRIErGFmmrzbofUniASErCo";
     private static final String BUTTON_TEXT = "Call Google Sheets API";
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { SheetsScopes.SPREADSHEETS };
@@ -68,6 +75,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     ProgressDialog mProgress;
     SharedPreferences settings;
     File session_file;
+    Context context;
 
     //Kairos stuff
     String [] images;
@@ -86,6 +94,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
         mOutputText = (TextView) findViewById(R.id.mOutputText);
         mCallApiButton = (Button) findViewById(R.id.mCallApiButton) ;
         settings = PreferenceManager.getDefaultSharedPreferences(this);
+        context = this;
         /////////////////////////////KAIROS
         Toast.makeText(this,settings.getString("SESSION_ID",""),Toast.LENGTH_SHORT).show();
         session_file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
@@ -371,17 +380,68 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
         @Override
         protected List<String> doInBackground(Void... params) {
             try {
-                List<String> fakeList = new ArrayList<String>();
-                return getDataFromApi();
+                List<String> fakeList = getDataFromApi();
+                String [] newcolarray = new String[3];
+                newcolarray[0]="saket";
+                newcolarray[1]="akash";
+                newcolarray[2]="akash";
+                insertColFromApi(2,newcolarray);
+                fakeList.add(Integer.toString(getColCountFromApi()));
+                return fakeList;
             } catch (Exception e) {
                 mLastError = e;
                 cancel(true);
                 return null;
             }
         }
+        private int getColCountFromApi() throws IOException {
+            String range = "1:1";
+            ValueRange response = this.mService.spreadsheets().values()
+                    .get(spreadsheetId, range)
+                    .execute();
+            List<List<Object>> values = response.getValues();
+            if(values.size()==1)
+                return values.get(0).size();
+            return 0;
+        }
+        private void insertColFromApi(int pos,String[] data) throws IOException {
+            DimensionRange newColumnDimensions = new DimensionRange();
+            newColumnDimensions
+                    .setSheetId(0)
+                    .setDimension("COLUMNS")
+                    .setStartIndex(pos)
+                    .setEndIndex(pos+1);
+            InsertDimensionRequest myRequest = new InsertDimensionRequest()
+                    .setRange(newColumnDimensions)
+                    .setInheritFromBefore(false);
+            List<Request> requests = new ArrayList<>();
+            requests.add(new Request()
+                            .setInsertDimension(myRequest));
+            BatchUpdateSpreadsheetRequest body =
+                    new BatchUpdateSpreadsheetRequest().setRequests(requests);
+            mService.spreadsheets().batchUpdate(spreadsheetId,body).execute();
+            /////////////////////////////////
+            String range = "C2:C4";
+            List<List<Object>> newColumnData = new ArrayList<>();
+            for(int i=0;i<data.length;++i){
+                List<Object> newlist = new ArrayList<>();
+                newlist.add(data[i]);
+                newColumnData.add(newlist);
+            }
+            ValueRange oRange = new ValueRange();
+            oRange.setRange(range);
+            oRange.setValues(newColumnData);
+            List<ValueRange> oList = new ArrayList<>();
+            oList.add(oRange);
+            BatchUpdateValuesRequest oRequest = new BatchUpdateValuesRequest();
+            oRequest.setValueInputOption("RAW");
+            oRequest.setData(oList);
+            BatchUpdateValuesResponse oResp1 =
+                    this.mService.spreadsheets().values().batchUpdate(spreadsheetId,oRequest).execute();
 
+        }
         private List<String> getDataFromApi() throws IOException {
-            String spreadsheetId = "1u6f5CySr98DB7mdIGDopmRIErGFmmrzbofUniASErCo";
+
             String range = "Sheet1!A1:E";
             List<String> results = new ArrayList<String>();
             ValueRange response = this.mService.spreadsheets().values()

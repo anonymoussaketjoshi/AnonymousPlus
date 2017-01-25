@@ -127,7 +127,7 @@ public class attendance_session extends AppCompatActivity {
         String course_name = settings.getString("COURSE_NAME","--").replaceAll(" ","_");
         String session_id = settings.getString("SESSION_ID","--");
         File coursef = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+course_name);
-        if(coursef.exists()) {
+        if(true){//coursef.exists()) {
             session_folder = new File(coursef.getAbsolutePath() + "/" + session_id);
             session_folder.mkdir();
         }

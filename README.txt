@@ -6,6 +6,9 @@
 
 Add preferences subscreens
 
+
 CRASH LOG:
 Project file corrupted.
 Check internet
+attendance session :- check folder
+
