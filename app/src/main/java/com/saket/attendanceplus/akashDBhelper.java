@@ -78,7 +78,8 @@ public class akashDBhelper extends SQLiteOpenHelper {
    * 5) del course
    * 6) get course list
    * 7) get prof list
-   * 8) check table*/
+   * 8) check table
+   * 9) get Link on courseName*/
 
     //adding a new professor
     public void addProfessor(Professor p) {
@@ -175,6 +176,20 @@ public class akashDBhelper extends SQLiteOpenHelper {
         return courseList;
 
     }
+
+
+
+    public String getLink(String courseName)    {
+        List<Course> courseList = getCourses();
+        Course course;
+        for(int i=0;i<courseList.size();i++)    {
+            course = courseList.get(i);
+            if(course.getCourseName().equals(courseName))
+                return course.getCourseLink();
+        }
+        return null;
+    }
+
 
     public Professor verifyProfessor(String id, String password){
         professorList = this.getProfessors();

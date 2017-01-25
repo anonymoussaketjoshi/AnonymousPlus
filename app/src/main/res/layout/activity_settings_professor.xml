@@ -12,19 +12,19 @@
     android:weightSum="1"
     tools:context="com.saket.attendanceplus.settings_professor">
     <TextView
-        android:layout_weight="0.5"
+        android:id="@+id/info_on_prof"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/prof_credentials"/>
-
+        android:text="For Changing Passwords, delete the existing Professor credentials and add as new Professor.\n"
+        android:textStyle="bold"/>
     <EditText
         android:layout_weight="0.1"
         android:id="@+id/prof_id"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="ID"
-    android:maxLines="1"
-    android:layout_below="@+id/prof_credentials"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/info_on_prof"
+        android:hint="ID"
+        android:maxLines="1" />
     <EditText
         android:layout_weight="0.1"
         android:id="@+id/prof_name"
@@ -47,8 +47,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true">
+        android:layout_below="@id/prof_password"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/layout_for_addDeleteButton_professor_page">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,6 +63,11 @@
             android:id="@+id/prof_delete_button"
             android:onClick="delete_professor"/>
     </LinearLayout>
-
+    <TextView
+        android:layout_weight="0.5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/prof_credentials"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

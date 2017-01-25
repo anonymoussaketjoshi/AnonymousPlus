@@ -11,15 +11,17 @@ import java.util.List;
 
 public class settings_professor extends AppCompatActivity {
     akashDBhelper dBhelper;
-    String textViewText = "For Changing Passwords, delete the existing Professor credentials and add as new Professor.\n\n";
+    String textViewText = "Professors Enrolled: \n";
     List<Professor> professorList;
+    TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_professor);
-    dBhelper = ((myCustomApplication)getApplication()).dBhelper;
-        TextView textView = (TextView)findViewById(R.id.prof_credentials);
+        dBhelper = ((myCustomApplication)getApplication()).dBhelper;
+        textView = (TextView)findViewById(R.id.prof_credentials);
         professorList = dBhelper.getProfessors();
+
         for(int i=0;i<professorList.size();i++) {
             textViewText += professorList.get(i).getName()+"\n";
         }
@@ -39,8 +41,14 @@ public class settings_professor extends AppCompatActivity {
             editText2.setText("");
             editText3.setText("");
         }
-            else
+        else
             Toast.makeText(this,"Enter valid credentials!",Toast.LENGTH_LONG).show();
+        professorList = dBhelper.getProfessors();
+        textViewText = "Professors Enrolled: \n";
+        for(int i=0;i<professorList.size();i++) {
+            textViewText += professorList.get(i).getName()+"\n";
+        }
+        textView.setText(textViewText);
     }
 
     public void delete_professor(View view)   {
@@ -63,7 +71,12 @@ public class settings_professor extends AppCompatActivity {
         }
         else
             Toast.makeText(this,"Invalid Professor credentials!",Toast.LENGTH_LONG).show();
-
+        professorList = dBhelper.getProfessors();
+        textViewText = "Professors Enrolled: \n";
+        for(int i=0;i<professorList.size();i++) {
+            textViewText += professorList.get(i).getName()+"\n";
+        }
+        textView.setText(textViewText);
 
     }
 }
