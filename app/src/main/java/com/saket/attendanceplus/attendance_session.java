@@ -46,8 +46,9 @@ public class attendance_session extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance_session);
 
-        android.support.v7.app.ActionBar myAction = getSupportActionBar();
-        myAction.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#028900")));
+        //GREEN COLOR
+        //android.support.v7.app.ActionBar myAction = getSupportActionBar();
+        //myAction.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#028900")));
         getSupportActionBar().setTitle(" Attendance Session");                                      //SET BETTER TITLE
 
         // Set up the login form.

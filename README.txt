@@ -8,6 +8,10 @@
 
 Add preferences subscreens
 
+Saket done list:
+1.	Set default preferences on startup
+2.	KAIROS Settings added
+3.	
 
 CRASH LOG:
 Project file corrupted.
@@ -15,6 +19,8 @@ Check internet
 attendance session :- check folder
 
 TO DO
+STRING TO number	CHECK BOTTOM FOR FUNCTION	***akash
+kairos authenticate check				***akash
 Action menu beautify					***akash
 To lower when matching					***akash
 THEME BLUE						***saket
@@ -43,6 +49,9 @@ REMOVE BIG SELECT COURSE				***saket
 Attendance session: Course name, Professor name		***saket
 Attendance recorded notification			***saket
 set default on start					***saket
+Reset default values:					***saket
+https://developer.android.com/reference/android/preference/PreferenceManager.html#setDefaultValues%28android.content.Context,%20int,%20boolean%29
+Add root account					***saket
 
 //PROCESS IMAGES PAGE
 //RESUME SESSION

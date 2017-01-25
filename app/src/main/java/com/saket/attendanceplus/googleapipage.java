@@ -65,7 +65,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
-    String spreadsheetId = "1u6f5CySr98DB7mdIGDopmRIErGFmmrzbofUniASErCo";
+    String spreadsheetId;
     private static final String BUTTON_TEXT = "Call Google Sheets API";
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { SheetsScopes.SPREADSHEETS };
@@ -84,9 +84,14 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     Bitmap img;
     String gallery = "myGallery";
 
+    //Google stuff
+    String keyColumn;
+    String insertColumn;
+
     //List of matched persons
     List<String> matchedPersons = new ArrayList<String>();
 
+    akashDBhelper dBhelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +100,11 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
         mCallApiButton = (Button) findViewById(R.id.mCallApiButton) ;
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         context = this;
+        dBhelper = ((myCustomApplication)getApplication()).dBhelper;
+        keyColumn = settings.getString("KEY_COLUMN","A");
+        insertColumn = settings.getString("INSERT_COLUMN","B");
+        //spreadsheetId = "1u6f5CySr98DB7mdIGDopmRIErGFmmrzbofUniASErCo";                             //
+        spreadsheetId = dBhelper.getLink(settings.getString("COURSE_NAME",""));
         /////////////////////////////KAIROS
         Toast.makeText(this,settings.getString("SESSION_ID",""),Toast.LENGTH_SHORT).show();
         session_file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
@@ -102,15 +112,18 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
                 settings.getString("COURSE_NAME","")+"/"+
                 settings.getString("SESSION_ID",""));
         if(!session_file.exists())
-            Toast.makeText(this,"SESSION FILE DOES'NT EXIST",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"SESSION FILE DOESN'T EXIST",Toast.LENGTH_LONG).show();
         else
             images = session_file.list();
 
         //Kairos authentication
         myKairos = new Kairos();
-        String kairos_id = "e190939d";
-        String kairos_key = "b6a70d7257457ea99cbcfa949f393477";
-        myKairos.setAuthentication(this,kairos_id,kairos_key);
+        String kairos_id = settings.getString("KAIROS_ID","");
+        String kairos_key = settings.getString("KAIROS_KEY","");
+        if(kairos_id.equals("") || kairos_key.equals(""))
+            Toast.makeText(this,"KAIROS ID OR KEY NOT PASSED Contact Admin",Toast.LENGTH_LONG).show();
+        else
+            myKairos.setAuthentication(this,kairos_id,kairos_key);
 
 
         ////////
@@ -398,8 +411,8 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
         @Override
         protected List<String> doInBackground(Void... params) {
             try {
-                List<String> idListFromSheet = getColumnFromApi('B');
-                insertColToApi('C',markAttendance(idListFromSheet));
+                List<String> idListFromSheet = getColumnFromApi(keyColumn);
+                insertColToApi(insertColumn,markAttendance(idListFromSheet));
                 return idListFromSheet;
                 /*List<String> fakeList = getColumnFromApi('A');//getDataFromApi();
                 String [] newcolarray = new String[3];
@@ -425,13 +438,13 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
                 return values.get(0).size();
             return 0;
         }
-        private void insertColToApi(char columnIndex,String[] data) throws IOException {
+        private void insertColToApi(String columnIndex,String[] data) throws IOException {
             DimensionRange newColumnDimensions = new DimensionRange();
             newColumnDimensions
                     .setSheetId(0)
                     .setDimension("COLUMNS")
-                    .setStartIndex(columnIndex - 'A')
-                    .setEndIndex(columnIndex - 'A' + 1);
+                    .setStartIndex(columnStringToIndex(columnIndex))
+                    .setEndIndex(columnStringToIndex(columnIndex) + 1);
             InsertDimensionRequest myRequest = new InsertDimensionRequest()
                     .setRange(newColumnDimensions)
                     .setInheritFromBefore(false);
@@ -479,7 +492,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
             }
             return results;
         }
-        private List<String> getColumnFromApi(char columnIndex) throws IOException {
+        private List<String> getColumnFromApi(String columnIndex) throws IOException {
             String range = (columnIndex + ":" + columnIndex).toUpperCase();
             List<String> results = new ArrayList<String>();
             ValueRange response = this.mService.spreadsheets().values()
@@ -533,5 +546,9 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
                 mOutputText.setText("Request cancelled.");
             }
         }
+    }
+    //////////////////////////////OWN DECLARED LITTLE FUNCTIONS
+    public int columnStringToIndex(String columnString){
+        return columnString.charAt(0)-'A';                                                          //CORRECT
     }
 }

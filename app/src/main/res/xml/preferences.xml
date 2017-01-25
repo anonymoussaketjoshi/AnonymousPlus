@@ -5,18 +5,57 @@
         android:title="This app is Awesome :D"
         android:summary="Must check to go back"
         android:defaultValue="true" />
-    <Preference
-        android:title="Professor Credentials">
-        <intent
-            android:action="android.intent.action.MAIN"
-            android:targetPackage="com.saket.attendanceplus"
-            android:targetClass="com.saket.attendanceplus.settings_professor" />
-    </Preference>
-    <Preference
-        android:title="Course Settings">
-        <intent
-            android:action="android.intent.action.MAIN"
-            android:targetPackage="com.saket.attendanceplus"
-            android:targetClass="com.saket.attendanceplus.settings_course" />
-    </Preference>
+    <PreferenceCategory
+        android:title = "General"
+        android:icon="@drawable/camera">
+        <Preference
+            android:title="Professor Credentials">
+            <intent
+                android:action="android.intent.action.MAIN"
+                android:targetPackage="com.saket.attendanceplus"
+                android:targetClass="com.saket.attendanceplus.settings_professor" />
+        </Preference>
+        <Preference
+            android:title="Course Settings">
+            <intent
+                android:action="android.intent.action.MAIN"
+                android:targetPackage="com.saket.attendanceplus"
+                android:targetClass="com.saket.attendanceplus.settings_course" />
+        </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Kairos settings">
+        <PreferenceScreen
+            android:title="Kairos Settings"
+            android:persistent="false">
+            <PreferenceCategory
+                android:title="Kairos settings">
+                <EditTextPreference
+                    android:defaultValue="b6a70d7257457ea99cbcfa949f393477"
+                    android:selectAllOnFocus="true"
+                    android:title="App key"
+                    android:key="KAIROS_KEY"/>
+                <EditTextPreference
+                    android:defaultValue="e190939d"
+                    android:selectAllOnFocus="true"
+                    android:title="Kairos ID"
+                    android:key="KAIROS_ID"/>
+            </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Google Sheets">
+        <EditTextPreference
+            android:defaultValue="B"
+            android:selectAllOnFocus="true"
+            android:title="Column index with key"
+            android:summary="Column index of google sheet with primary keys,i.e. IDs"
+            android:key="KEY_COLUMN"/>
+        <EditTextPreference
+            android:defaultValue="C"
+            android:selectAllOnFocus="true"
+            android:title="Column index for new session"
+            android:summary="Column index of spreadsheey where new session attendance is to be inserted"
+            android:key="INSERT_COLUMN"/>
+    </PreferenceCategory>
 </PreferenceScreen>
