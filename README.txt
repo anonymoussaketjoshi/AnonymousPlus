@@ -31,6 +31,8 @@ kairos authenticate check				***akash
 Action menu beautify					***akash
 To lower when matching					***akash
 THEME BLUE						***saket			-----------------
+To lower when matching					***akash                                                    $$Done
+THEME BLUE						***saket
 delete folder on delete course				***akash
 session select - decrypt to prof and time		***akash
 Reverse session id min,hour				***saket			----------------
@@ -45,10 +47,12 @@ Appstart checks:
 	check folders					***akash 
 	set default preferences				***saket			----------------
 Remove password from attendance activity
-On add or delete refresh text box			***akash
+On add or delete refresh text box			***akash                                                $$Done
 Show Courses and link					***akash
 Beautify course and professor add settings		***akash
 Sign out functionality, override back button on session	***saket			------------------------
+Beautify course and professor add settings		***akash                                            $$Done
+Sign out functionality, override back button on session	***saket
 delete images matched correctly				***saket
 REMOVE ID CHECK						*@*saket
 Select session set title				***saket

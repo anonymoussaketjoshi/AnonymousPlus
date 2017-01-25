@@ -10,17 +10,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.saket.attendanceplus.settings_course">
     <TextView
-        android:id="@+id/course_details"
+        android:id="@+id/info_on_course"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="wrap_content"
+        android:text="You can only add or delete a course.\n"
+        android:textStyle="bold"/>
     <EditText
         android:id="@+id/course_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Course Name"
-        android:maxLines="1"
-        android:layout_below="@+id/course_details"/>
+        android:layout_below="@+id/info_on_course"
+        android:maxLines="1" />
     <EditText
         android:id="@+id/course_link"
         android:layout_width="match_parent"
@@ -33,7 +34,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/course_link"
+        android:id="@+id/layout_for_addDeleteButton"
         android:layout_centerHorizontal="true">
         <Button
             android:layout_width="wrap_content"
@@ -48,5 +50,10 @@
             android:id="@+id/course_delete_button"
             android:onClick="delete_course"/>
     </LinearLayout>
+    <TextView
+        android:id="@+id/course_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

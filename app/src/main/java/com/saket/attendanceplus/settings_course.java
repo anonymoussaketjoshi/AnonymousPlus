@@ -13,15 +13,15 @@ import java.util.List;
 
 public class settings_course extends AppCompatActivity {
     akashDBhelper dBhelper;
-    String textViewText = "You can only add or delete a course.\n\n";
+    String textViewText = "Courses enrolled: \n";
     List<Course> courseList;
-
+    TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_course);
         dBhelper = ((myCustomApplication)getApplication()).dBhelper;
-        TextView textView = (TextView)findViewById(R.id.course_details);
+        textView = (TextView)findViewById(R.id.course_details);
         courseList = dBhelper.getCourses();
         for(int i=0;i<courseList.size();i++) {
             textViewText += courseList.get(i).getCourseName()+"\n";
@@ -44,11 +44,18 @@ public class settings_course extends AppCompatActivity {
             if(f!=null && !f.exists()) {
                 f.mkdir();
             }
-            else
-                Toast.makeText(this,"crash",Toast.LENGTH_LONG).show();
+            else {
+                Toast.makeText(this, "Folder already existed", Toast.LENGTH_LONG).show();
+            }
         }
         else
             Toast.makeText(this,"Enter valid Name and Link!",Toast.LENGTH_LONG).show();
+        courseList = dBhelper.getCourses();
+        textViewText = "Courses enrolled: \n";
+        for(int i=0;i<courseList.size();i++) {
+            textViewText += courseList.get(i).getCourseName()+"\n";
+        }
+        textView.setText(textViewText);
     }
 
     // No code added to delete the folder
@@ -68,6 +75,9 @@ public class settings_course extends AppCompatActivity {
                 dBhelper.deleteCourse(new Course(courseName, courseLink));
                 editText1.setText("");
                 editText2.setText("");
+                File dir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+courseName);
+                if(dir.isDirectory())
+                    dir.delete();
             }
             else
                 Toast.makeText(this,"Course details invalid, Course doesn't exist!",Toast.LENGTH_LONG).show();
@@ -75,6 +85,11 @@ public class settings_course extends AppCompatActivity {
         else
             Toast.makeText(this,"Enter valid Name and Link!",Toast.LENGTH_LONG).show();
 
-
+        courseList = dBhelper.getCourses();
+        textViewText = "Courses enrolled: \n";
+        for(int i=0;i<courseList.size();i++) {
+            textViewText += courseList.get(i).getCourseName()+"\n";
+        }
+        textView.setText(textViewText);
     }
 }

@@ -258,7 +258,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
         String[] attendanceList = new String[namesList.size()];
         attendanceList[0] = settings.getString("SESSION_ID","--");
         for(int i=1;i<namesList.size();++i) {
-            if(matchedPersons.contains(namesList.get(i)))
+            if(matchedPersons.contains(namesList.get(i).toLowerCase()))
                 attendanceList[i] = "Present";
             else
                 attendanceList[i] = "Absent";
