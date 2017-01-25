@@ -90,14 +90,17 @@ public class attendance_session extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {                                           //DIRECT CORRECTLY
+        int sign_out_request_code = 0;
         Intent newPage = new Intent(this,main_login.class);
-        startActivity(newPage);
+        newPage.putExtra("PURPOSE","SIGN_OUT");
+        startActivityForResult(newPage,sign_out_request_code);
         return true;
     }
+
     @Override
     public void onBackPressed(){
-        finish();
-        //Toast.makeText(this,"Back? I don't think so",Toast.LENGTH_LONG).show();
+        //finish();
+        Toast.makeText(this,"Back? I don't think so",Toast.LENGTH_LONG).show();
     }
 
     public void takePhoto(View view) throws IOException {
@@ -115,13 +118,9 @@ public class attendance_session extends AppCompatActivity {
             imageSet = true;
             curImage = tempImage;
         }
-        if(requestCode == 3) {                                                                      //ON SIGNOUT
-            /*appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            if (appPreferences.getBoolean("session_status", true) == false){
+        if(requestCode == 0 && resultCode == RESULT_OK)
+            if(data.getData().toString().equals("LOGOUT"))
                 finish();
-                return;
-            }*/
-        }
     }
 
     public Boolean createFolder()   {

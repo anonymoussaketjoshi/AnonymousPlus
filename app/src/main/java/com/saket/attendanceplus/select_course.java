@@ -28,16 +28,22 @@ public class select_course extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_course);
-        android.support.v7.app.ActionBar myAction = getSupportActionBar();
-        myAction.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#028900")));
-        setTitle("Select Course");
+        //android.support.v7.app.ActionBar myAction = getSupportActionBar();
+        //myAction.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#028900")));           //Action bar color
         courseList = (ListView) findViewById(R.id.courseListid);
         greetPerson = (TextView) findViewById(R.id.welcome_user_text);
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         greetPerson.setText("Welcome " + settings.getString("PROF_NAME",""));
         myextras = getIntent().getExtras();
+        setToolBarText(myextras.getString("PURPOSE"));
         dBhelper = ((myCustomApplication)getApplication()).dBhelper;
         populateList();
+    }
+    public void setToolBarText(String purpose){
+        if(purpose.equals("START_SESSION") || purpose.equals("PROCESS"))
+            setTitle("Choose Course");
+        else if(purpose.equals("PROCESS2"))
+            setTitle("Choose Session");
     }
     public void course_click(View view){
         if(myextras.containsKey("PURPOSE") && myextras.getString("PURPOSE").equals("START_SESSION")) {
@@ -77,7 +83,6 @@ public class select_course extends AppCompatActivity {
             for (int i = 0; i < courses.size(); ++i) {
                 courses_names[i] = courses.get(i).getCourseName();
             }
-            Toast.makeText(this, Integer.toString(courses.size()), Toast.LENGTH_LONG).show();
             customListAdapter myAdapter = new customListAdapter(this, R.layout.list_button_view, courses_names);
             courseList.setAdapter(myAdapter);
         }
