@@ -196,8 +196,11 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
             }
             mOutputText.setText(matchedPersons.toString());
             imgno=imgno+1;
-            if(imgno<images.length)
+            if(imgno<images.length) {
                 processImage(mOutputText);
+            }
+            //else
+                //new MakeRequestTask(mCredential).execute();
         }
         @Override
         public void onFail(String response) {
@@ -237,9 +240,9 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
 
     /////////////Method to sync matched photos and sheet student id's
     public String[] markAttendance(List<String> namesList)   {
-        String[] attendanceList = new String[namesList.size()+1];
+        String[] attendanceList = new String[namesList.size()];
         attendanceList[0] = settings.getString("SESSION_ID","--");
-        for(int i=1;i<namesList.size()+1;++i) {
+        for(int i=1;i<namesList.size();++i) {
             if(matchedPersons.contains(namesList.get(i)))
                 attendanceList[i] = "Present";
             else
@@ -393,14 +396,17 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
         @Override
         protected List<String> doInBackground(Void... params) {
             try {
-                List<String> fakeList = getColumnFromApi('A');//getDataFromApi();
+                List<String> idListFromSheet = getColumnFromApi('B');
+                insertColToApi('C',markAttendance(idListFromSheet));
+                return idListFromSheet;
+                /*List<String> fakeList = getColumnFromApi('A');//getDataFromApi();
                 String [] newcolarray = new String[3];
                 newcolarray[0]="saket";
                 newcolarray[1]="akash";
                 newcolarray[2]="akash";
                 insertColToApi('C',newcolarray);
                 //fakeList.add(Integer.toString(getColCountFromApi()));
-                return fakeList;
+                return fakeList;*/
             } catch (Exception e) {
                 mLastError = e;
                 cancel(true);
