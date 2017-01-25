@@ -1,3 +1,4 @@
+fake change
 1. Did not check if table exists in DB
 2. Check() if correct folders exist on start
 	--CRASHING IF NO COURSE, CHOOSE COURSE		***akash
