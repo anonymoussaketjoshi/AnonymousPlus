@@ -9,6 +9,7 @@ import com.kairos.KairosListener;
 
 import org.json.JSONException;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -17,9 +18,16 @@ import java.io.UnsupportedEncodingException;
 
 public class kairosHandler {
     public String response;
-    Kairos kairos = new Kairos();
+    Kairos kairos;
     private String app_id = "e190939d";
     private String api_key = "b6a70d7257457ea99cbcfa949f393477";
+    String gallery = "MyGallery";
+    Context context;
+    public void kairosHandler(){
+        kairos = new Kairos();
+        this.context = context;
+        //authenticate(context);
+    }
 
     KairosListener listener = new KairosListener() {
         @Override
@@ -30,8 +38,10 @@ public class kairosHandler {
         @Override
         public void onFail(String s) {
             response = s;
+            Toast.makeText(context,"KAIROS FAILED: "+response,Toast.LENGTH_SHORT).show();
         }
     };
+
 
     /* Methods defined
     * 1) authenticate

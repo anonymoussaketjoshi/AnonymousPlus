@@ -7,14 +7,18 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -32,8 +36,14 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import com.kairos.Kairos;
+import com.kairos.KairosListener;
 
+import org.json.JSONException;
+
+import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,7 +65,12 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     private Button mCallApiButton;
     ProgressDialog mProgress;
     SharedPreferences settings;
-
+    File session_file;
+    String [] images;
+    int imgno=0;
+    Kairos myKairos;
+    Bitmap img;
+    KairosListener listener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +78,45 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
         mOutputText = (TextView) findViewById(R.id.mOutputText);
         mCallApiButton = (Button) findViewById(R.id.mCallApiButton) ;
         settings = PreferenceManager.getDefaultSharedPreferences(this);
-        ////////
+        /////////////////////////////KAIROS
         Toast.makeText(this,settings.getString("SESSION_ID",""),Toast.LENGTH_SHORT).show();
+        session_file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                .getAbsolutePath()+"/"+
+                settings.getString("COURSE_NAME","")+"/"+
+                settings.getString("SESSION_ID",""));
+        if(!session_file.exists())
+            Toast.makeText(this,"SESSION FILE DOES'NT EXIST",Toast.LENGTH_LONG).show();
+        else
+            images = session_file.list();
+        myKairos = new Kairos();
+        String kairos_id = "e190939d";
+        String kairos_key = "b6a70d7257457ea99cbcfa949f393477";
+        String gallery = "MyGallery";
+        myKairos.setAuthentication(this,kairos_id,kairos_key);
+        listener = new KairosListener() {
+            @Override
+            public void onSuccess(String response) {
+                if(response!=null && response.substring(0,8).equals("{\"Errors"))
+                    mOutputText.setText(mOutputText.getText().toString()+"\n"+"No face in image");
+                else {
+                    File img = new File(session_file,images[imgno]);
+                    if(img.delete())
+                        mOutputText.setText(mOutputText.getText().toString() + "\n" + "Face Found => Image Deleted");
+                    else
+                        mOutputText.setText(mOutputText.getText().toString() + "\n" + "Face Found => Image couldn't be Deleted");
+                }
+                //updateTime((imgno+1)*100/images.length);
+                imgno=imgno+1;
+                if(imgno<images.length)
+                    processImage(mOutputText);
+            }
+            @Override
+            public void onFail(String response) {
+                //Toast.makeText(null,"FAILED RESPONSE",Toast.LENGTH_SHORT).show();
+                // your code here!
+                Log.d("KAIROS DEMO", response);
+            }
+        };
         ////////
         mCallApiButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +132,29 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
+    }
+
+    //////////////////////KAIROS
+    public void processImage(View view){
+        if(images!=null && imgno<images.length)
+        img = BitmapFactory.decodeFile(session_file.getPath() + "/" + images[imgno]);
+        else
+        Toast.makeText(this,"process image invalid index",Toast.LENGTH_SHORT).show();
+        //filesview.setText(filesview.getText().toString() + "\n"+"Processing image: "+images[imgno]);
+        //imageView.setImageBitmap(img);
+        if(img==null)
+            Toast.makeText(this,"no image",Toast.LENGTH_SHORT).show();
+        else
+            sendPOST();
+    }
+    public void sendPOST(){
+        try {
+            myKairos.detect(img, null, null, listener);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     /////////////////////GOOGLE SDK OVERRIDDED FUNCTIONS

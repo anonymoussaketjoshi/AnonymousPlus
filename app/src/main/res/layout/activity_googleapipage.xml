@@ -29,4 +29,13 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/mCallApiButton" />
+
+    <Button
+        android:text="PROCESS IMAGES"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mCallApiButton"
+        android:layout_alignRight="@+id/mCallApiButton"
+        android:layout_alignEnd="@+id/mCallApiButton"
+        android:onClick = "processImage"/>
 </RelativeLayout>
