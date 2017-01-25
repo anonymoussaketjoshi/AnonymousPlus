@@ -47,5 +47,5 @@
         android:layout_above="@+id/button4"
         android:layout_alignRight="@+id/button4"
         android:layout_alignEnd="@+id/button4"
-        android:onClick="click_listGallery" />
+        android:onClick="click_listGallery"/>
 </RelativeLayout>

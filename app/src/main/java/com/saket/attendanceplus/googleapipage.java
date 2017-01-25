@@ -39,7 +39,9 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import com.kairos.Kairos;
 import com.kairos.KairosListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,9 +74,11 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     int imgno = 0;
     Kairos myKairos;
     Bitmap img;
-    String gallery = "MyGallery";
+    String gallery = "myGallery";
 
-    KairosListener listener,list_listener;
+    //List of matched persons
+    List<String> matchedPersons = new ArrayList<String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,46 +96,14 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
             Toast.makeText(this,"SESSION FILE DOES'NT EXIST",Toast.LENGTH_LONG).show();
         else
             images = session_file.list();
+
+        //Kairos authentication
         myKairos = new Kairos();
         String kairos_id = "e190939d";
         String kairos_key = "b6a70d7257457ea99cbcfa949f393477";
-
         myKairos.setAuthentication(this,kairos_id,kairos_key);
-        listener = new KairosListener() {
-            @Override
-            public void onSuccess(String response) {
-                if(response!=null && response.substring(0,8).equals("{\"Errors"))
-                    mOutputText.setText(mOutputText.getText().toString()+"\n"+"No face in image");
-                else {
-                    File img = new File(session_file,images[imgno]);
-                    if(true)//img.delete())
-                        mOutputText.setText(mOutputText.getText().toString() + "\n" + "Face Found => Image Deleted");
-                    else
-                        mOutputText.setText(mOutputText.getText().toString() + "\n" + "Face Found => Image couldn't be Deleted");
-                }
-                mOutputText.setText(response);
-                //updateTime((imgno+1)*100/images.length);
-                imgno=imgno+1;
-                if(imgno<images.length)
-                    processImage(mOutputText);
-            }
-            @Override
-            public void onFail(String response) {
-                //Toast.makeText(null,"FAILED RESPONSE",Toast.LENGTH_SHORT).show();
-                // your code here!
-                Log.d("KAIROS DEMO", response);
-            }
-        };
-        list_listener = new KairosListener() {
-            @Override
-            public void onSuccess(String response) {
-                mOutputText.setText(response);
-            }
-            @Override
-            public void onFail(String response) {
-                Log.d("KAIROS DEMO", response);
-            }
-        };
+
+
         ////////
         mCallApiButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,6 +120,83 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
     }
+    //----------------------------end of on create------------------
+
+    KairosListener list_listener = new KairosListener() {
+        @Override
+        public void onSuccess(String response) {
+            mOutputText.setText(response);
+        }
+        @Override
+        public void onFail(String response) {
+            Log.d("KAIROS DEMO", response);
+        }
+    };
+
+    KairosListener listener = new KairosListener() {
+        @Override
+        public void onSuccess(String s) {
+            /*if(response!=null && response.substring(0,8).equals("{\"Errors"))
+                mOutputText.setText(mOutputText.getText().toString()+"\n"+"No face in image");
+            else {
+                File img = new File(session_file,images[imgno]);
+                if(true)//img.delete())
+                    mOutputText.setText(mOutputText.getText().toString() + "\n" + "Face Found => Image Deleted");
+                else
+                    mOutputText.setText(mOutputText.getText().toString() + "\n" + "Face Found => Image couldn't be Deleted");
+            }
+            mOutputText.setText(response);
+            //updateTime((imgno+1)*100/images.length);
+            imgno=imgno+1;
+            if(imgno<images.length)
+                processImage(mOutputText);
+        */
+            String output_response = "";
+            try {
+                JSONObject object = new JSONObject(s);
+                if(object.has("Errors")) {
+                    JSONArray errors = object.getJSONArray("Errors");
+                    JSONObject object0 = errors.getJSONObject(0);
+                    output_response += "\n Error: "+object0.getString("Message")+"\n";
+                    matchedPersons.add("No face found");
+                }
+
+                else if(object.has("images"))   {
+                    JSONArray images = object.getJSONArray("images");
+                    JSONObject object0 = images.getJSONObject(0);
+                    JSONObject transaction = object0.getJSONObject("transaction");
+                    String status = transaction.getString("status");
+
+                    if(object0.has("candidates"))   {
+                        JSONArray candidates = object0.getJSONArray("candidates");
+                        output_response = "\nStatus = " + status + "\nMatched with: \n";
+                        matchedPersons.add(candidates.getJSONObject(0).getString("subject_id"));
+                        for (int i = 0; i < candidates.length(); ++i) {
+                            output_response += candidates.getJSONObject(i).getString("subject_id") + "\n";
+                        }
+                    }
+
+                    else    {
+                        String message = transaction.getString("message");
+                        output_response += "\nStatus = " + status+"\nMessage = "+message+"\n";
+                        matchedPersons.add("No match");
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            mOutputText.setText(matchedPersons.toString());
+            imgno=imgno+1;
+            if(imgno<images.length)
+                processImage(mOutputText);
+        }
+        @Override
+        public void onFail(String response) {
+            //Toast.makeText(null,"FAILED RESPONSE",Toast.LENGTH_SHORT).show();
+            // your code here!
+            Log.d("KAIROS DEMO", response);
+        }
+    };
 
     //////////////////////KAIROS
     public void processImage(View view){

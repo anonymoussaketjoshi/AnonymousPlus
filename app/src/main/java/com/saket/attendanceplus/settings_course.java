@@ -39,8 +39,8 @@ public class settings_course extends AppCompatActivity {
             dBhelper.addCourse(new Course(courseName,courseLink));
             editText1.setText("");
             editText2.setText("");
-            File f = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),courseName);
-            //File f = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+courseName);
+            //File f = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),courseName);
+            File f = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+courseName);
             if(f!=null && !f.exists()) {
                 f.mkdir();
             }
