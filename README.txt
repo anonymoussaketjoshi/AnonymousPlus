@@ -1,6 +1,7 @@
 1. Did not check if table exists in DB
 2. Check() if correct folders exist on start
 	--CRASHING IF NO COURSE, CHOOSE COURSE		***akash
+	-- Process Images 2 times			
 3. Check where database is being stored
 4. attendance session set title
 5. check for image duplicates?
@@ -14,6 +15,9 @@ Check internet
 attendance session :- check folder
 
 TO DO
+Action menu beautify					***akash
+To lower when matching					***akash
+THEME BLUE						***saket
 delete folder on delete course				***akash
 session select - decrypt to prof and time		***akash
 Reverse session id min,hour				***saket
@@ -38,8 +42,9 @@ Select session set title				***saket
 REMOVE BIG SELECT COURSE				***saket
 Attendance session: Course name, Professor name		***saket
 Attendance recorded notification			***saket
+set default on start					***saket
 
-//
+//PROCESS IMAGES PAGE
 //RESUME SESSION
 //REMOVE 
 //ADD ID CHECKING

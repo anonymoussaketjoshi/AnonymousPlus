@@ -199,8 +199,10 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
             if(imgno<images.length) {
                 processImage(mOutputText);
             }
-            //else
+            else {
+                imgno = 0;
                 //new MakeRequestTask(mCredential).execute();
+            }
         }
         @Override
         public void onFail(String response) {
