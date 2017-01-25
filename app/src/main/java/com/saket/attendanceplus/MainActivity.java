@@ -18,10 +18,4 @@ public class MainActivity extends AppCompatActivity {
         Intent loginpage = new Intent(this,main_login.class);
         startActivity(loginpage);
     }
-    void click_google_api(View view){
-        startActivity(new Intent(this,googleapipage.class));
-    }
-    void click_settings(View view){
-        startActivity(new Intent(this,settings.class));
-    }
 }

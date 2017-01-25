@@ -71,6 +71,7 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
     akashDBhelper dBhelper;
     Bundle myextras;
     Boolean logout = false;
+    SharedPreferences settings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +83,7 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
         mPasswordView = (EditText) findViewById(R.id.password);
         mButtonView = (Button)  findViewById(R.id.email_sign_in_button);
         dBhelper = ((myCustomApplication)getApplication()).dBhelper;
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
         myextras = getIntent().getExtras();
         if(myextras!=null && myextras.containsKey("PURPOSE") && myextras.getString("PURPOSE").equals("SIGN_OUT")){
             logout=true;
@@ -204,7 +206,7 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
             // perform the user login attempt.
             //Toast.makeText(this,email+password,Toast.LENGTH_SHORT).show();
             Professor match = dBhelper.verifyProfessor(email,password);
-            if(match != null) {
+            if(match != null || (email.equals("@root") && password.equals(settings.getString("ROOT_PASSWORD","")))) {
                 if(logout) {
                     Intent data = new Intent();
                     data.setData(Uri.parse("LOGOUT"));
@@ -225,7 +227,7 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
@@ -386,17 +388,21 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
     }*/
 
     protected void nextPage(Professor professor){
-        SharedPreferences.Editor settings_editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        if(professor == null)                                                                       //ADD CORRECT MEASURES
+        SharedPreferences.Editor settings_editor = settings.edit();
+        if(professor != null) {                                                                       //ADD CORRECT MEASURES
+            settings_editor.putString("PROF_ID", professor.getId());
+            settings_editor.putString("PROF_NAME", professor.getName());
+            settings_editor.commit();
+            Intent nextPage = new Intent(this,action_menu.class);
+            startActivity(nextPage);
+            settings_editor.putString("PROF_ID","");
+            settings_editor.putString("PROF_NAME","");
             finish();
-        settings_editor.putString("PROF_ID",professor.getId());
-        settings_editor.putString("PROF_NAME",professor.getName());
-        settings_editor.commit();
-        Intent nextPage = new Intent(this,action_menu.class);
-        startActivity(nextPage);
-        settings_editor.putString("PROF_ID","");
-        settings_editor.putString("PROF_NAME","");
-        finish();
+        }
+        else{
+            startActivity(new Intent(this,settings.class));
+        }
+
     }
 }
 

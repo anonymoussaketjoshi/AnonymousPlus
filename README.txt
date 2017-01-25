@@ -18,7 +18,7 @@ Saket done list:
 7.	Set theme Blue
 8.	Corrected time format
 9.	Added signout functionality
-10.
+10.	Removed @ condition from username
 
 CRASH LOG:
 Project file corrupted.
@@ -52,20 +52,23 @@ Show Courses and link					***akash
 Beautify course and professor add settings		***akash
 Sign out functionality, override back button on session	***saket			------------------------
 Beautify course and professor add settings		***akash                                            $$Done
-Sign out functionality, override back button on session	***saket
+Sign out functionality, override back button on session	***saket			------------------------
 delete images matched correctly				***saket
-REMOVE ID CHECK						*@*saket
-Select session set title				***saket
+REMOVE ID CHECK						*@*saket				9999
+Select session set title				***saket			-----------------------
 REMOVE BIG SELECT COURSE				***saket			-------------------
 Attendance session: Course name, Professor name		***saket
 Attendance recorded notification			***saket
-set default on start					***saket
-Reset default values:					***saket
+set default on start					***saket			-------------------
+Reset default values:					***saket			
 https://developer.android.com/reference/android/preference/PreferenceManager.html#setDefaultValues%28android.content.Context,%20int,%20boolean%29
 Add root account					***saket
 Correct back, activity flow				***saket			--------------------
 Add Settings ICON					***saket
 Add bACK BUTTONS					***saket
+Add password view button
+
+Case check on 
 //PROCESS IMAGES PAGE
 //RESUME SESSION
 //REMOVE 

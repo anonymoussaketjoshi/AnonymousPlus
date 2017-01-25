@@ -6,7 +6,7 @@
         android:summary="Must check to go back"
         android:defaultValue="true" />
     <PreferenceCategory
-        android:title = "General"
+        android:title = "Accounts Settings"
         android:icon="@drawable/camera">
         <Preference
             android:title="Professor Credentials">
@@ -22,6 +22,11 @@
                 android:targetPackage="com.saket.attendanceplus"
                 android:targetClass="com.saket.attendanceplus.settings_course" />
         </Preference>
+        <EditTextPreference
+            android:defaultValue="toor"
+            android:selectAllOnFocus="true"
+            android:title="Root Account Password"
+            android:key="ROOT_PASSWORD"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Kairos settings">

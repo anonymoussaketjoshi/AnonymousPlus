@@ -49,17 +49,16 @@ public class attendance_session extends AppCompatActivity {
         //GREEN COLOR
         //android.support.v7.app.ActionBar myAction = getSupportActionBar();
         //myAction.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#028900")));
-        getSupportActionBar().setTitle(" Attendance Session");                                      //SET BETTER TITLE
-
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mImageView = (ImageView) findViewById(R.id.imageViewid);
         mPasswordView = (EditText) findViewById(R.id.password);
         mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         settings = PreferenceManager.getDefaultSharedPreferences(this);
-        Toast.makeText(this,settings.getString("SESSION_ID","--"),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,settings.getString("SESSION_ID","--"),Toast.LENGTH_SHORT).show();
         focusView = mEmailView;
         focusView.requestFocus();
+        getSupportActionBar().setTitle(settings.getString("COURSE_NAME","")+" session");                                      //SET BETTER TITLE
         if(!createFolder())
             Toast.makeText(this,"UNABLE TO INITIALIZE SESSION DIRECTORY",Toast.LENGTH_SHORT).show();
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
