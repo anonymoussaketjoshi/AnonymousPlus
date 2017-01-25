@@ -103,8 +103,8 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
         dBhelper = ((myCustomApplication)getApplication()).dBhelper;
         keyColumn = settings.getString("KEY_COLUMN","A");
         insertColumn = settings.getString("INSERT_COLUMN","B");
-        //spreadsheetId = "1u6f5CySr98DB7mdIGDopmRIErGFmmrzbofUniASErCo";                             //
-        spreadsheetId = dBhelper.getLink(settings.getString("COURSE_NAME",""));
+        spreadsheetId = "1u6f5CySr98DB7mdIGDopmRIErGFmmrzbofUniASErCo";                             //
+        //spreadsheetId = dBhelper.getLink(settings.getString("COURSE_NAME",""));
         /////////////////////////////KAIROS
         Toast.makeText(this,settings.getString("SESSION_ID",""),Toast.LENGTH_SHORT).show();
         session_file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)

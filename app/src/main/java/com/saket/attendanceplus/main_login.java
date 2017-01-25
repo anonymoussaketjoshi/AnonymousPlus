@@ -64,11 +64,13 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private Button mButtonView;
 
     //Sqlite database for this activity via application class
     //final myCustomApplication var = (myCustomApplication) getApplicationContext();
     akashDBhelper dBhelper;
-
+    Bundle myextras;
+    Boolean logout = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +80,14 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         mPasswordView = (EditText) findViewById(R.id.password);
+        mButtonView = (Button)  findViewById(R.id.email_sign_in_button);
         dBhelper = ((myCustomApplication)getApplication()).dBhelper;
-
+        myextras = getIntent().getExtras();
+        if(myextras!=null && myextras.containsKey("PURPOSE") && myextras.getString("PURPOSE").equals("SIGN_OUT")){
+            logout=true;
+            setTitle("End Session");
+            mButtonView.setText("Sign Out");
+        }
         populateAutoComplete();
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -196,8 +204,15 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
             // perform the user login attempt.
             //Toast.makeText(this,email+password,Toast.LENGTH_SHORT).show();
             Professor match = dBhelper.verifyProfessor(email,password);
-            if(match != null)
+            if(match != null) {
+                if(logout) {
+                    Intent data = new Intent();
+                    data.setData(Uri.parse("LOGOUT"));
+                    setResult(RESULT_OK,data);
+                    finish();
+                }
                 nextPage(match);
+            }
             else
                 Toast.makeText(this,"INCORRECT CREDENTIALS",Toast.LENGTH_SHORT).show();
 

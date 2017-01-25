@@ -18,18 +18,12 @@
             android:layout_height="wrap_content"
             android:textAlignment="textEnd"
             android:layout_gravity="end"
+            android:textSize="19dp"
             android:id="@+id/welcome_user_text"
             />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Select Course"
-            android:textAlignment="center"
-            android:textSize="40dp"/>
-
         <Space
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="30dp" />
 
         <ListView
             android:layout_width="match_parent"

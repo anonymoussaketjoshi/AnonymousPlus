@@ -17,7 +17,7 @@ public class saketTime {
                 date    = Integer.toString(Calendar.getInstance().get(Calendar.DATE)),
                 month   = Integer.toString(Calendar.getInstance().get(Calendar.MONTH)),
                 year    = Integer.toString(Calendar.getInstance().get(Calendar.YEAR));
-        return date + "-" + month + "-" + year + ":" + minutes + "-" + hour;
+        return date + "-" + month + "-" + year + ":" +hour + ":" + minutes;
     }
     public String getSessionId(String prof_name,String course_name){
         return prof_name.replaceAll(" ","_")+":"+course_name.replaceAll(" ","_")+":"+getTimeString();
