@@ -167,7 +167,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
                     JSONArray errors = object.getJSONArray("Errors");
                     JSONObject object0 = errors.getJSONObject(0);
                     output_response += "\n Error: "+object0.getString("Message")+"\n";
-                    matchedPersons.add("No face found");
+                    //matchedPersons.add("No face found");
                 }
 
                 else if(object.has("images"))   {
@@ -179,7 +179,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
                     if(object0.has("candidates"))   {
                         JSONArray candidates = object0.getJSONArray("candidates");
                         output_response = "\nStatus = " + status + "\nMatched with: \n";
-                        matchedPersons.add(candidates.getJSONObject(0).getString("subject_id"));
+                        matchedPersons.add(candidates.getJSONObject(0).getString("subject_id").toLowerCase());
                         for (int i = 0; i < candidates.length(); ++i) {
                             output_response += candidates.getJSONObject(i).getString("subject_id") + "\n";
                         }
@@ -188,7 +188,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
                     else    {
                         String message = transaction.getString("message");
                         output_response += "\nStatus = " + status+"\nMessage = "+message+"\n";
-                        matchedPersons.add("No match");
+                        //matchedPersons.add("No match");
                     }
                 }
             } catch (JSONException e) {
@@ -233,6 +233,19 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     public void click_listGallery(View view) throws UnsupportedEncodingException, JSONException {
         myKairos.listSubjectsForGallery(gallery, list_listener);
         return;
+    }
+
+    /////////////Method to sync matched photos and sheet student id's
+    public String[] markAttendance(List<String> namesList)   {
+        String[] attendanceList = new String[namesList.size()+1];
+        attendanceList[0] = settings.getString("SESSION_ID","--");
+        for(int i=1;i<namesList.size()+1;++i) {
+            if(matchedPersons.contains(namesList.get(i)))
+                attendanceList[i] = "Present";
+            else
+                attendanceList[i] = "Absent";
+        }
+        return attendanceList;
     }
 
     /////////////////////GOOGLE SDK OVERRIDDED FUNCTIONS
