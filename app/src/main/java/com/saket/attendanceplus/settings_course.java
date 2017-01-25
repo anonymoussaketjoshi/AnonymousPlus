@@ -39,10 +39,13 @@ public class settings_course extends AppCompatActivity {
             dBhelper.addCourse(new Course(courseName,courseLink));
             editText1.setText("");
             editText2.setText("");
-            File f = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+courseName);
-            if(!f.exists()) {
+            File f = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),courseName);
+            //File f = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+courseName);
+            if(f!=null && !f.exists()) {
                 f.mkdir();
             }
+            else
+                Toast.makeText(this,"crash",Toast.LENGTH_LONG).show();
         }
         else
             Toast.makeText(this,"Enter valid Name and Link!",Toast.LENGTH_LONG).show();

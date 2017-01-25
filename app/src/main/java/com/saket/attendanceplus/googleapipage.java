@@ -66,11 +66,15 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     ProgressDialog mProgress;
     SharedPreferences settings;
     File session_file;
+
+    //Kairos stuff
     String [] images;
-    int imgno=0;
+    int imgno = 0;
     Kairos myKairos;
     Bitmap img;
-    KairosListener listener;
+    String gallery = "MyGallery";
+
+    KairosListener listener,list_listener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +95,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
         myKairos = new Kairos();
         String kairos_id = "e190939d";
         String kairos_key = "b6a70d7257457ea99cbcfa949f393477";
-        String gallery = "MyGallery";
+
         myKairos.setAuthentication(this,kairos_id,kairos_key);
         listener = new KairosListener() {
             @Override
@@ -100,11 +104,12 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
                     mOutputText.setText(mOutputText.getText().toString()+"\n"+"No face in image");
                 else {
                     File img = new File(session_file,images[imgno]);
-                    if(img.delete())
+                    if(true)//img.delete())
                         mOutputText.setText(mOutputText.getText().toString() + "\n" + "Face Found => Image Deleted");
                     else
                         mOutputText.setText(mOutputText.getText().toString() + "\n" + "Face Found => Image couldn't be Deleted");
                 }
+                mOutputText.setText(response);
                 //updateTime((imgno+1)*100/images.length);
                 imgno=imgno+1;
                 if(imgno<images.length)
@@ -114,6 +119,16 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
             public void onFail(String response) {
                 //Toast.makeText(null,"FAILED RESPONSE",Toast.LENGTH_SHORT).show();
                 // your code here!
+                Log.d("KAIROS DEMO", response);
+            }
+        };
+        list_listener = new KairosListener() {
+            @Override
+            public void onSuccess(String response) {
+                mOutputText.setText(response);
+            }
+            @Override
+            public void onFail(String response) {
                 Log.d("KAIROS DEMO", response);
             }
         };
@@ -149,12 +164,17 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     }
     public void sendPOST(){
         try {
-            myKairos.detect(img, null, null, listener);
+            myKairos.recognize(img,gallery, null, null, null, null, listener);
+            //myKairos.detect(img, null, null, listener);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+    public void click_listGallery(View view) throws UnsupportedEncodingException, JSONException {
+        myKairos.listSubjectsForGallery(gallery, list_listener);
+        return;
     }
 
     /////////////////////GOOGLE SDK OVERRIDDED FUNCTIONS
