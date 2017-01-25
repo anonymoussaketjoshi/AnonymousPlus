@@ -380,13 +380,13 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
         @Override
         protected List<String> doInBackground(Void... params) {
             try {
-                List<String> fakeList = getDataFromApi();
+                List<String> fakeList = getColumnFromApi('A');//getDataFromApi();
                 String [] newcolarray = new String[3];
                 newcolarray[0]="saket";
                 newcolarray[1]="akash";
                 newcolarray[2]="akash";
-                insertColFromApi(2,newcolarray);
-                fakeList.add(Integer.toString(getColCountFromApi()));
+                insertColToApi('C',newcolarray);
+                //fakeList.add(Integer.toString(getColCountFromApi()));
                 return fakeList;
             } catch (Exception e) {
                 mLastError = e;
@@ -404,13 +404,13 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
                 return values.get(0).size();
             return 0;
         }
-        private void insertColFromApi(int pos,String[] data) throws IOException {
+        private void insertColToApi(char columnIndex,String[] data) throws IOException {
             DimensionRange newColumnDimensions = new DimensionRange();
             newColumnDimensions
                     .setSheetId(0)
                     .setDimension("COLUMNS")
-                    .setStartIndex(pos)
-                    .setEndIndex(pos+1);
+                    .setStartIndex(columnIndex - 'A')
+                    .setEndIndex(columnIndex - 'A' + 1);
             InsertDimensionRequest myRequest = new InsertDimensionRequest()
                     .setRange(newColumnDimensions)
                     .setInheritFromBefore(false);
@@ -421,7 +421,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
                     new BatchUpdateSpreadsheetRequest().setRequests(requests);
             mService.spreadsheets().batchUpdate(spreadsheetId,body).execute();
             /////////////////////////////////
-            String range = "C2:C4";
+            String range = columnIndex+":"+columnIndex;
             List<List<Object>> newColumnData = new ArrayList<>();
             for(int i=0;i<data.length;++i){
                 List<Object> newlist = new ArrayList<>();
@@ -441,8 +441,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
 
         }
         private List<String> getDataFromApi() throws IOException {
-
-            String range = "Sheet1!A1:E";
+            String range = "A1:E";
             List<String> results = new ArrayList<String>();
             ValueRange response = this.mService.spreadsheets().values()
                     .get(spreadsheetId, range)
@@ -455,6 +454,21 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
                     //results.add(Integer.toString(row.size()));
                     //SAKET NOTE: REMEMBER TO CHECK SIZE
                     results.add(row.get(0) + ", " + row.get(1));
+                }
+            }
+            return results;
+        }
+        private List<String> getColumnFromApi(char columnIndex) throws IOException {
+            String range = (columnIndex + ":" + columnIndex).toUpperCase();
+            List<String> results = new ArrayList<String>();
+            ValueRange response = this.mService.spreadsheets().values()
+                    .get(spreadsheetId, range)
+                    .execute();
+
+            List<List<Object>> values = response.getValues();
+            if (values != null) {
+                for (List row : values) {
+                    results.add(row.get(0).toString());
                 }
             }
             return results;
