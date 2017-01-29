@@ -173,7 +173,10 @@ public class attendance_session extends AppCompatActivity {
         focusView.requestFocus();
     }
     private boolean submit(String id){
-        if(imageSet==false) return false;                                                         //SUBMIT ATTENDANCE
+        if(imageSet==false){
+            Toast.makeText(this,id,Toast.LENGTH_SHORT).show();
+            return false;                                                         //SUBMIT ATTENDANCE
+        }
         try{
             File imageFile = new File(session_folder,id+".png");
             FileOutputStream fileStream = new FileOutputStream(imageFile);

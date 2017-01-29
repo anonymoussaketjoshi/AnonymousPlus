@@ -36,8 +36,11 @@
         <activity android:name=".settings" />
         <activity android:name=".settings_professor" />
         <activity android:name=".settings_course" />
-        <activity android:name=".googleapipage"></activity>
+        <activity android:name=".googleapipage" />
+        <activity android:name=".tabViewActivity"
+            android:theme="@style/NoActionBar">
 
+        </activity>
     </application>
 
 </manifest>

@@ -272,7 +272,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     private void getResultsFromApi() {
         if (! isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
-        } else if (mCredential.getSelectedAccountName() == null) {
+        } else if (mCredential.getSelectedAccountName() == null){
             chooseAccount();
         } else if (! isDeviceOnline()) {
             mOutputText.setText("No network connection available.");

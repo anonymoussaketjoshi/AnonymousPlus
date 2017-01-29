@@ -9,11 +9,13 @@ import android.widget.Toast;
 
 public class myCustomApplication extends Application{
     public akashDBhelper dBhelper;
+    private static myCustomApplication mInstance;
 
     @Override
     public void onCreate()  {
         super.onCreate();
         dBhelper = new akashDBhelper(this);
+        mInstance = this;
         //dBhelper.addProfessor(new Professor("tsn","tsn100","tsn"));
         //dBhelper.addProfessor(new Professor("prp","prp100","prp"));
 
@@ -23,5 +25,13 @@ public class myCustomApplication extends Application{
         else
             Toast.makeText(getApplicationContext(),professorList.get(0).getName()+" "+professorList.get(0).getPassword(),Toast.LENGTH_LONG).show();
         */
+    }
+
+    public static synchronized myCustomApplication getInstance()    {
+        return mInstance;
+    }
+
+    public void setConnectivityListener(ConnectivityReceiver.ConnectivityReceiverListener listener) {
+        ConnectivityReceiver.connectivityReceiverListener = listener;
     }
 }

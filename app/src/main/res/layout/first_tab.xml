@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:id="@+id/first_tab_relative_layout">
+    <LinearLayout
+        android:id="@+id/linear_layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CAPTURE IMAGE"
+            android:id="@+id/image_Button"
+            android:layout_gravity="center_horizontal"/>
+        <ImageView
+            android:layout_width="350dp"
+            android:layout_height="200dp"
+            android:id="@+id/image_view"
+            android:layout_gravity="center_horizontal"
+            />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relative_layout1"
+        android:layout_below="@id/linear_layout1"
+        android:orientation="vertical"
+        android:gravity="center">
+        <EditText
+            android:gravity="center_horizontal"
+            android:id="@+id/enrollNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="SubjectId or Enroll Name"
+            android:maxLines="1"/>
+        <Button
+            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ENROLL"
+            android:id="@+id/Enroll_button"
+            android:layout_below="@id/enrollNameEditText"/>
+        <TextView
+            android:id="@+id/response_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/Enroll_button"/>
+    </RelativeLayout>
+</RelativeLayout>

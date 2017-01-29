@@ -111,7 +111,6 @@ public class main_login extends AppCompatActivity implements LoaderCallbacks<Cur
             }
         });
         List<Professor> professorList = dBhelper.getProfessors();
-        Toast.makeText(this,Integer.toString(professorList.size()),Toast.LENGTH_SHORT).show();
     }
 
     private void populateAutoComplete() {
