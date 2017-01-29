@@ -173,6 +173,7 @@ public class attendance_session extends AppCompatActivity {
         focusView.requestFocus();
     }
     private boolean submit(String id){
+
         if(imageSet==false){
             Toast.makeText(this,id,Toast.LENGTH_SHORT).show();
             return false;                                                         //SUBMIT ATTENDANCE
