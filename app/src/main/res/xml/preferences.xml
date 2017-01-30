@@ -35,6 +35,13 @@
             android:persistent="false">
             <PreferenceCategory
                 android:title="Kairos settings">
+                <Preference
+                    android:title="Kairos manager">
+                    <intent
+                        android:action="android.intent.action.MAIN"
+                        android:targetPackage="com.saket.attendanceplus"
+                        android:targetClass="com.saket.attendanceplus.tabViewActivity" />
+                </Preference>
                 <EditTextPreference
                     android:defaultValue="b6a70d7257457ea99cbcfa949f393477"
                     android:selectAllOnFocus="true"
