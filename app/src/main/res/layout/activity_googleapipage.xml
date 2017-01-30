@@ -8,44 +8,42 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_weight="4"
     tools:context="com.saket.attendanceplus.googleapipage">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:id="@+id/image_view_process_images"/>
 
     <TextView
+        android:gravity="center"
+        android:layout_below="@+id/image_view_process_images"
         android:text="TEXT STUFF"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
-        android:id="@+id/mOutputText" />
+        android:id="@+id/mOutputText"
+        android:scrollbars="vertical" />
 
     <Button
-        android:text="CALL API"
+        android:text="Update Excel Sheet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentRight="true"
         android:id="@+id/mCallApiButton" />
 
     <Button
         android:text="PROCESS IMAGES"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/mCallApiButton"
-        android:layout_alignRight="@+id/mCallApiButton"
-        android:layout_alignEnd="@+id/mCallApiButton"
-        android:onClick = "processImage"
-        android:id="@+id/button4" />
-
-    <Button
-        android:text="LIST gallery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button4"
-        android:layout_alignRight="@+id/button4"
-        android:layout_alignEnd="@+id/button4"
-        android:onClick="click_listGallery"/>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/process_image_button" />
 </RelativeLayout>

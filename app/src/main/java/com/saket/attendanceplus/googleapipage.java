@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -16,11 +17,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +62,7 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class googleapipage extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+public class googleapipage extends AppCompatActivity implements EasyPermissions.PermissionCallbacks,ConnectivityReceiver.ConnectivityReceiverListener {
     GoogleAccountCredential mCredential;
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
@@ -72,6 +75,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
 
     private TextView mOutputText;
     private Button mCallApiButton;
+    private Button processImagesButton;
     ProgressDialog mProgress;
     SharedPreferences settings;
     File session_file;
@@ -83,7 +87,6 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     Kairos myKairos;
     Bitmap img;
     String gallery = "myGallery";
-
     //Google stuff
     String keyColumn;
     String insertColumn;
@@ -98,6 +101,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
         setContentView(R.layout.activity_googleapipage);
         mOutputText = (TextView) findViewById(R.id.mOutputText);
         mCallApiButton = (Button) findViewById(R.id.mCallApiButton) ;
+        processImagesButton = (Button)findViewById(R.id.process_image_button);
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         context = this;
         dBhelper = ((myCustomApplication)getApplication()).dBhelper;
@@ -127,14 +131,32 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
             myKairos.setAuthentication(this,kairos_id,kairos_key);
 
 
+        //onClick listener for process images
+        processImagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isConnected = checkConnection();
+                if(isConnected){
+                    showSnack(isConnected);
+                    processImage();
+                }
+                else
+                    showSnack(isConnected);
+            }
+        });
         ////////
         mCallApiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean isConnected = checkConnection();
+                if(isConnected){
+                    showSnack(isConnected);
                 mCallApiButton.setEnabled(false);
                 mOutputText.setText("");
                 getResultsFromApi();
-                mCallApiButton.setEnabled(true);
+                mCallApiButton.setEnabled(true);}
+                else
+                    showSnack(isConnected);
             }
         });
         mProgress = new ProgressDialog(this);
@@ -181,7 +203,7 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
                     JSONArray errors = object.getJSONArray("Errors");
                     JSONObject object0 = errors.getJSONObject(0);
                     output_response += "\n Error: "+object0.getString("Message")+"\n";
-                    //matchedPersons.add("No face found");
+                    matchedPersons.add("No face found");
                 }
 
                 else if(object.has("images"))   {
@@ -202,20 +224,24 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
                     else    {
                         String message = transaction.getString("message");
                         output_response += "\nStatus = " + status+"\nMessage = "+message+"\n";
-                        //matchedPersons.add("No match");
+                        matchedPersons.add("No match");
                     }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            mOutputText.setText(matchedPersons.toString());
+            mOutputText.setText("Matching Status = "+matchedPersons.get(matchedPersons.size()-1));
+            ImageView imageView = (ImageView) findViewById(R.id.image_view_process_images);
+            imageView.setImageBitmap(img);
             imgno=imgno+1;
             if(imgno<images.length) {
-                processImage(mOutputText);
+                processImage();
             }
             else {
                 imgno = 0;
                 //new MakeRequestTask(mCredential).execute();
+                imageView.setImageDrawable(null);
+                mOutputText.setText("Done with matching!\nYou can Update Excel Sheet now!");
             }
         }
         @Override
@@ -227,9 +253,11 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     };
 
     //////////////////////KAIROS
-    public void processImage(View view){
-        if(images!=null && imgno<images.length)
-        img = BitmapFactory.decodeFile(session_file.getPath() + "/" + images[imgno]);
+    public void processImage(){
+        if(images!=null && imgno<images.length) {
+            img = BitmapFactory.decodeFile(session_file.getPath() + "/" + images[imgno]);
+
+        }
         else
         Toast.makeText(this,"process image invalid index",Toast.LENGTH_SHORT).show();
         //filesview.setText(filesview.getText().toString() + "\n"+"Processing image: "+images[imgno]);
@@ -551,5 +579,40 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
     //////////////////////////////OWN DECLARED LITTLE FUNCTIONS
     public int columnStringToIndex(String columnString){
         return columnString.charAt(0)-'A';                                                          //CORRECT
+    }
+
+    private void showSnack(boolean isConnected) {
+        String message;
+        int color;
+        if(isConnected) {
+            message = "Connected to Internet!";
+            color = Color.WHITE;
+        }
+        else {
+            message = "No internet connection!";
+            color = Color.RED;
+        }
+
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.activity_googleapipage),message,Snackbar.LENGTH_LONG);
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(color);
+        snackbar.show();
+    }
+
+    private boolean checkConnection() {
+        return ConnectivityReceiver.isConnected();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // register connection status listener
+        myCustomApplication.getInstance().setConnectivityListener(this);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showSnack(isConnected);
     }
 }

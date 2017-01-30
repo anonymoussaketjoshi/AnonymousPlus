@@ -18,8 +18,4 @@ public class MainActivity extends AppCompatActivity {
         Intent loginpage = new Intent(this,main_login.class);
         startActivity(loginpage);
     }
-    void goToTabView(View view) {
-        Intent intent = new Intent(this,tabViewActivity.class);
-        startActivity(intent);
-    }
 }
