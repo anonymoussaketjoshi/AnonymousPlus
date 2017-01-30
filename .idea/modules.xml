@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AnonymousPlus.iml" filepath="$PROJECT_DIR$/AnonymousPlus.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Attendanceplus.iml" filepath="$PROJECT_DIR$/Attendanceplus.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
