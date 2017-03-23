@@ -126,15 +126,13 @@ public class FirstTab extends Fragment implements ConnectivityReceiver.Connectiv
                     String college_name = editText2.getText().toString();
                     String id_no = editText3.getText().toString();
                     String token_no = editText4.getText().toString();
-                    if (!subjectId.equals("") && !college_name.equals("") && !id_no.equals("") && !token_no.equals(""))
-
-                    if (!subjectId.equals("") && imageView!=null)
+                    if (!subjectId.equals("") && !college_name.equals("") && !id_no.equals("") && !token_no.equals("")) {
                         try {
-                            subjectId.replaceAll(" ","_");
-                            try{
-                                File imageFile = new File(enroll_folder,subjectId+".png");
+                            subjectId.replaceAll(" ", "_");
+                            try {
+                                File imageFile = new File(enroll_folder, subjectId + ".png");
                                 FileOutputStream fileStream = new FileOutputStream(imageFile);
-                                tempImg.compress(Bitmap.CompressFormat.PNG,100,fileStream);
+                                tempImg.compress(Bitmap.CompressFormat.PNG, 100, fileStream);
                                 fileStream.close();
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
@@ -154,6 +152,7 @@ public class FirstTab extends Fragment implements ConnectivityReceiver.Connectiv
                             e.printStackTrace();
                             Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
                         }
+                    }
                     else if (tempImg == null)
                         Toast.makeText(getActivity(), "Check Taken Image", Toast.LENGTH_LONG).show();
                     else
