@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -23,8 +24,12 @@ import com.kairos.KairosListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -37,6 +42,7 @@ public class FirstTab extends Fragment implements ConnectivityReceiver.Connectiv
     static final int CAM_REQUEST = 1;
     Bitmap tempImg;
     Kairos myKairos = new Kairos();
+    File enroll_folder;
 
     KairosListener listener = new KairosListener() {
         @Override
@@ -90,7 +96,9 @@ public class FirstTab extends Fragment implements ConnectivityReceiver.Connectiv
             String app_id = "e190939d";
             String api_key = "b6a70d7257457ea99cbcfa949f393477";
             myKairos.setAuthentication(getActivity(), app_id, api_key);
-
+            enroll_folder = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/enrollfolder");
+            if(!enroll_folder.exists())
+                enroll_folder.mkdir();
             button = (Button) v.findViewById(R.id.image_Button);
             imageView = (ImageView) v.findViewById(R.id.image_view);
 
@@ -119,10 +127,25 @@ public class FirstTab extends Fragment implements ConnectivityReceiver.Connectiv
                     String id_no = editText3.getText().toString();
                     String token_no = editText4.getText().toString();
                     if (!subjectId.equals("") && !college_name.equals("") && !id_no.equals("") && !token_no.equals(""))
+
+                    if (!subjectId.equals("") && imageView!=null)
                         try {
+                            subjectId.replaceAll(" ","_");
+                            try{
+                                File imageFile = new File(enroll_folder,subjectId+".png");
+                                FileOutputStream fileStream = new FileOutputStream(imageFile);
+                                tempImg.compress(Bitmap.CompressFormat.PNG,100,fileStream);
+                                fileStream.close();
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             myKairos.enroll(tempImg, subjectId, "myGallery", null, null, null, listener);
                             imageView.setImageDrawable(null);
                             tempImg = null;
+                            ((TextView) v.findViewById(R.id.response_textView)).setText("Enrolling......\n" +
+                                    "Waiting for response....");
                             editText1.setText("");
                         } catch (JSONException e) {
                             e.printStackTrace();

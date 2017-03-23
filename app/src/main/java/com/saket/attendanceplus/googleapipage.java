@@ -550,8 +550,9 @@ public class googleapipage extends AppCompatActivity implements EasyPermissions.
             if (output == null || output.size() == 0) {
                 mOutputText.setText("No results returned.");
             } else {
-                output.add(0, "Data retrieved using the Google Sheets API:");
-                mOutputText.setText(TextUtils.join("\n", output));
+                //output.add(0, "Data retrieved using the Google Sheets API:");
+                mOutputText.setText("Course Spreadsheet updated.");
+                //mOutputText.setText(TextUtils.join("\n", output));
             }
         }
 

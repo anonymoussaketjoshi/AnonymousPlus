@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:textSize="16dp"
             android:id="@+id/button_start_session"
-            android:onClick="click_start_session"/>
+            android:onClick="click_start_session"
+            android:background="@android:drawable/dialog_holo_light_frame" />
 
         <Button
             android:text="Process Images"
@@ -33,7 +34,8 @@
             android:layout_height="wrap_content"
             android:textSize="16dp"
             android:id="@+id/button_process"
-            android:onClick="click_process"/>
+            android:onClick="click_process"
+            android:background="@android:drawable/dialog_holo_light_frame" />
 
     </LinearLayout>
 </RelativeLayout>
