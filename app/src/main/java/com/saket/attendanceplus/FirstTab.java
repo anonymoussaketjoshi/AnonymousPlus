@@ -103,6 +103,7 @@ public class FirstTab extends Fragment implements ConnectivityReceiver.Connectiv
             });
 
             Button enroll_button = (Button) v.findViewById(R.id.Enroll_button);
+
             enroll_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -110,8 +111,14 @@ public class FirstTab extends Fragment implements ConnectivityReceiver.Connectiv
                     if(isConnected)   {
                         showSnack(isConnected);
                     EditText editText1 = (EditText) v.findViewById(R.id.enrollNameEditText);
+                    EditText editText2 = (EditText) v.findViewById(R.id.college_name_editText);
+                    EditText editText3 = (EditText) v.findViewById(R.id.Id_no_editText);
+                    EditText editText4 = (EditText) v.findViewById(R.id.token_no_editText);
                     String subjectId = editText1.getText().toString();
-                    if (!subjectId.equals(""))
+                    String college_name = editText2.getText().toString();
+                    String id_no = editText3.getText().toString();
+                    String token_no = editText4.getText().toString();
+                    if (!subjectId.equals("") && !college_name.equals("") && !id_no.equals("") && !token_no.equals(""))
                         try {
                             myKairos.enroll(tempImg, subjectId, "myGallery", null, null, null, listener);
                             imageView.setImageDrawable(null);
@@ -127,7 +134,7 @@ public class FirstTab extends Fragment implements ConnectivityReceiver.Connectiv
                     else if (tempImg == null)
                         Toast.makeText(getActivity(), "Check Taken Image", Toast.LENGTH_LONG).show();
                     else
-                        Toast.makeText(getActivity(), "Enter valid Enroll name", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Enter valid credentials", Toast.LENGTH_LONG).show();
 
                 }
                     else

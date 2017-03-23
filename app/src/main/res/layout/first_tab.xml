@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:id="@+id/first_tab_relative_layout">
-    <LinearLayout
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:id="@+id/first_tab_relative_layout">
+        <TextView
+            android:id="@+id/response_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <LinearLayout
         android:id="@+id/linear_layout1"
+        android:layout_below="@id/response_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -17,38 +31,76 @@
             android:id="@+id/image_Button"
             android:layout_gravity="center_horizontal"/>
         <ImageView
-            android:layout_width="350dp"
-            android:layout_height="200dp"
+            android:layout_width="250dp"
+            android:layout_height="100dp"
             android:id="@+id/image_view"
             android:layout_gravity="center_horizontal"
             />
     </LinearLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/relative_layout1"
-        android:layout_below="@id/linear_layout1"
-        android:orientation="vertical"
-        android:gravity="center">
-        <EditText
-            android:gravity="center_horizontal"
-            android:id="@+id/enrollNameEditText"
+
+
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="SubjectId or Enroll Name"
-            android:maxLines="1"/>
-        <Button
-            android:gravity="center_horizontal"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ENROLL"
-            android:id="@+id/Enroll_button"
-            android:layout_below="@id/enrollNameEditText"/>
-        <TextView
-            android:id="@+id/response_textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/Enroll_button"/>
+            android:id="@+id/relative_layout1"
+            android:layout_below="@id/linear_layout1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <EditText
+                android:gravity="center_horizontal"
+                android:id="@+id/enrollNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Student Name"
+                android:maxLines="1"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:id="@+id/college_name_editText"
+                android:maxLines="1"
+                android:layout_centerHorizontal="true"
+                android:hint="College Name"
+                android:layout_below="@id/enrollNameEditText"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:id="@+id/Id_no_editText"
+                android:maxLines="1"
+                android:layout_centerHorizontal="true"
+                android:hint="ID no."
+                android:layout_below="@id/college_name_editText"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:id="@+id/token_no_editText"
+                android:maxLines="1"
+                android:layout_centerHorizontal="true"
+                android:hint="Token No."
+                android:layout_below="@id/Id_no_editText"/>
+            <Button
+                android:gravity="center_horizontal"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ENROLL Student"
+                android:id="@+id/Enroll_button"
+                android:layout_below="@id/token_no_editText"
+                tools:textSize="14sp" />
+            <Button
+                android:gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update Excel Sheet"
+                android:id="@+id/update_sheet_info"
+                android:layout_below="@id/token_no_editText"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
     </RelativeLayout>
-</RelativeLayout>
+    </ScrollView>
+
