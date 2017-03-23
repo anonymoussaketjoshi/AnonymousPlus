@@ -35,8 +35,9 @@
             android:id="@+id/enrollNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="SubjectId or Enroll Name"
-            android:maxLines="1"/>
+            android:hint="Enroll Name(branch+id example: ce15)"
+            android:inputType="text"
+            android:maxLines="1" />
         <Button
             android:gravity="center_horizontal"
             android:layout_centerHorizontal="true"
@@ -49,6 +50,7 @@
             android:id="@+id/response_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="16dp"
             android:layout_below="@id/Enroll_button"/>
     </RelativeLayout>
 </RelativeLayout>

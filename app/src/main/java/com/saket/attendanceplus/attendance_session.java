@@ -167,8 +167,10 @@ public class attendance_session extends AppCompatActivity {
             focusView = mEmailView;
             if(submit(email))
                 Toast.makeText(this,"Saved Sucessfully ID: "+email,Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(this,"SAVING FAILED. Contact Admin",Toast.LENGTH_SHORT).show();
+            else {
+                Toast.makeText(this, "SAVING FAILED. Contact Admin", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Tip: Try replacing spaces in course name with _", Toast.LENGTH_SHORT).show();
+            }
         }
         focusView.requestFocus();
     }
